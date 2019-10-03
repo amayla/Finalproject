@@ -1,0 +1,374 @@
+di db.json, create
+{
+  "users": [
+    {
+      
+    }
+  ]
+}
+
+di register.js
+
+class Register extends Component{
+    onRegisterClick = () => {
+        let username = this.username.value
+        let email = this.email.value
+        let password = this.password.value
+
+        // cek apakah username sudah terpakai
+        axios.get(
+            'http://localhost:3000/users', {params:{username: username}}
+        ).then((res) => {
+            if(res.data.length>0){
+                alert('username is already being used')
+            }else{
+                //check if email is already used
+                axios.get(
+                    'http://localhost:3000/users', 
+                    {params:{email: email}}
+                ).then ((res) => {
+                     //jika user ditemukan
+                    if(res.data.length>0){
+                        alert('email is already being used')
+                    }else{
+                        alert('Register success!')
+                        axios.post(
+                            'http://localhost:3000/users', 
+                            {
+                                username: username,
+                                email: email,
+                                password: password
+                            }
+                        )
+                        
+                    }
+                })
+
+            }
+        })
+        
+    }
+    render(){
+        
+            if(!this.props.username){
+                return (
+                    <div className= "background-register">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-sm-8 col-md-4 mx-auto margin-register">
+                                <div className="card-body">
+                                    <div className="card-title">
+                                        <h1>Register</h1>
+                                    </div>
+                                
+                                    <form>
+                                        <div className="input-group"><input ref={(input)=>{this.username = input}} type="text" className="form-control mt-3" placeholder="Username"/></div>
+                                        <div className="input-group"><input ref={(input)=>{this.email = input}} type="email" className="form-control mt-3" placeholder="Email"/></div>
+                                        <div className="input-group"><input ref={(input)=>{this.password = input}} type="password" className="form-control mt-3" placeholder="Password"/></div>
+                                    </form>
+        
+                                    <div className="text-center">
+                                        <button className="btn btn-block mt-4" style={{backgroundColor:'#BEAC74',fontFamily:'arial',fontSize:'18px'}} onClick={this.onRegisterClick}>Register</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                )
+    
+            } else {
+                return (
+                    <Redirect to= '/'/>
+                )
+            }
+            
+    }
+
+}
+
+//state=folder, auth= reducernya, username=propertiesnya
+const mapStateToProps = state => {
+    return {
+        username: state.auth.username
+    }
+  }
+  export default connect(mapStateToProps)(Register)
+
+----------------------------------------------------------------------------------------------
+
+index.js pada src
+
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './components/app'
+
+import {Provider} from 'react-redux'
+import reducers from './reducers/index'
+import {createStore} from 'redux'
+//import {createStore, applyMiddleware, compose} from 'redux'
+//import thunk from 'redux-thunk'
+
+
+//const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const STORE = createStore(
+    reducers,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    // ,composeEnhancers( applyMiddleware(thunk))
+    
+    )
+
+ReactDOM.render(
+<Provider store = {STORE}>
+<App/>,
+</Provider>,
+document.getElementById("root")
+
+)
+-------------------------------------------------------------------------------------------
+index.js pada reducers
+
+import {combineReducers} from 'redux'
+const init = {
+
+    id:'',
+    username:''
+
+}
+
+const AuthReducer = (state = init,action) => {
+    switch (action.type){
+// akan menyalin property di state untuk kemudian diubah 'id' dan 'username'
+        case 'LOGIN_SUCCESS':
+        return {...state,
+            id: action.payload.id, 
+            username:action.payload.username
+        }
+
+        case 'LOGOUT_SUCCESS':
+            return {...state,
+                id: '',
+                username:''
+            }
+        ;
+
+    default:
+        
+        return state
+
+    }
+
+}
+
+const reducers = combineReducers(
+    {
+        auth : AuthReducer
+    }
+)
+export default reducers
+
+--------------------------------------------------------------------------------
+login.js
+
+import React,{Component} from 'react'
+import {Redirect} from 'react-router-dom' 
+import {connect} from 'react-redux'
+
+import {onLoginUser} from '../actions/index'
+import axios from 'axios'
+
+class Login extends Component{
+
+    onLoginClick = (e) => {
+        e.preventDefault()
+        axios.get(
+                'http://localhost:3000/users',
+                {params:{
+                    username : this.username.value,
+                    password : this.password.value
+                }
+            }
+        ).then((res) => {
+            if(res.data.length===0){
+                alert('Cannot find username')
+            }else {
+                let{id,username,email} = res.data[0]
+                localStorage.setItem(
+                    'UserData',
+                    JSON.stringify({id,username,email})
+                )
+                this.props.onLoginUser(id,username,email)
+            }
+        })
+        
+    }
+
+
+
+    render(){
+        
+        if(!this.props.username){
+            return (
+                <div className= "background-register">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-8 col-md-4 mx-auto margin-register">
+                            <div className="card-body">
+                                <div className="card-title">
+                                    <h1>Log In</h1>
+                                </div>
+                            
+                                <form>
+                                    <div className="input-group">
+                                        <input ref={(input)=>{this.username = input}} 
+                                        type="text" className="form-control mt-3" 
+                                        placeholder="Username"/></div>
+                                    
+                                    <div className="input-group">
+                                        <input ref={(input)=>{this.password = input}} 
+                                        type="password" className="form-control mt-3" 
+                                        placeholder="Password"/></div>
+                                </form>
+    
+                                <div className="text-center">
+                                    <button className="btn btn-block mt-4" 
+                                    style={{backgroundColor:'#BEAC74',fontFamily:'arial',fontSize:'18px'}} 
+                                    onClick={this.onLoginClick}>Log In</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            )
+
+        } else {
+            return <Redirect to= '/'/>
+            
+        }
+        
+    }
+}
+const mapStateToProps = state => {
+    return {
+        username: state.auth.username
+    }
+  }
+
+    export default connect(mapStateToProps,{onLoginUser})(Login)
+
+
+-----------------------------------------------------------------------------------------------------------------------
+register
+
+import React,{Component} from 'react'
+import {withRouter,Redirect} from 'react-router-dom' 
+import axios from 'axios'
+import {connect} from 'react-redux'
+
+import "../css/register.css"
+const mapStateToProps = state => {
+    return {
+        username: state.auth.username
+    }
+  }
+
+class Register extends Component{
+    onRegisterClick = () => {
+        let username = this.username.value
+        let email = this.email.value
+        let password = this.password.value
+
+        // cek apakah username sudah terpakai
+        axios.get(
+            'http://localhost:3000/users', {params:{username: username}}
+        ).then((res) => {
+            if(res.data.length>0){
+                alert('username is already being used')
+            }else{
+                //check if email is already used
+                axios.get(
+                    'http://localhost:3000/users', 
+                    {params:{email: email}}
+                ).then ((res) => {
+                     //jika user ditemukan
+                    if(res.data.length>0){
+                        alert('email is already being used')
+                    }else{
+                        axios.post(
+                            'http://localhost:3000/users', 
+                            {
+                                username: username,
+                                email: email,
+                                password: password
+                            }
+                        ).then(() => {
+                            this.setState({loading:false, success: 'Registration successful'})
+
+                            setTimeout(() => {
+                                this.props.history.push('/login')
+                            },3000)
+                        })
+                        
+                    }
+                })
+
+            }
+        })
+        
+    }
+        
+    
+    render(){
+        
+            if(!this.props.username){
+                return (
+                    <div className= "background-register">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-sm-8 col-md-4 mx-auto margin-register">
+                                <div className="card-body">
+                                    <div className="card-title">
+                                        <h1>Register</h1>
+                                    </div>
+                                
+                                    <form>
+                                        <div className="input-group"><input 
+                                        ref={(input)=>{this.username = input}} 
+                                        type="text" className="form-control mt-3" 
+                                        placeholder="Username"/></div>
+                                        <div className="input-group"><input ref={(input)=>{this.email = input}} 
+                                        type="email" className="form-control mt-3" placeholder="Email"/></div>
+                                        <div className="input-group"><input ref={(input)=>{this.password = input}} 
+                                        type="password" className="form-control mt-3" placeholder="Password"/></div>
+                                    </form>
+                                    <div className="text-center">
+                                        <button className="btn btn-block mt-4" style={{backgroundColor:'#BEAC74',fontFamily:'arial',fontSize:'18px'}} 
+                                        onClick={this.onRegisterClick}>Register</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                )
+    
+            } else {
+                return <Redirect to='/'/>
+                
+            }
+            
+    }
+
+}
+
+//state=folder, auth= reducernya, username=propertiesnya
+
+  export default withRouter(connect(mapStateToProps)(Register))
+
+
+
+
+
+
+
