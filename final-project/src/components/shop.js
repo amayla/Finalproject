@@ -2,6 +2,7 @@ import React,{Component} from 'react'
 import Axios from 'axios';
 import ProductCard from './productCard'
 import {Button} from 'reactstrap'
+
 //import Link from 'react-router-dom'
 
 
@@ -95,9 +96,9 @@ class Shop extends Component{
         //ambil data berupa array
         //apabila products isinya array of object
         // products = [{},{},{}]
-        return this.state.searchProducts.map((product) => {
+        return this.state.searchProducts.map((product,index) => {
         
-         return <ProductCard barang={product} key={product.id}/>   
+         return <ProductCard barang={product} key={index}/>   
                
          
         })
@@ -106,15 +107,12 @@ class Shop extends Component{
     render() {
         return (
             
-            <div  style={{textAlign:"left"}}>
-                
-                <div>
-                    
+            <div className='container' style={{textAlign:"left"}}>
+                <div>   
                     <div className='form p-3 border-bottom border-secondary card-title'>
                         <div className='border-bottom border-secondary card-title'>
                             <h4>Search</h4>
                         </div>
-                        
                         <div className='row mb-5'>
                             <div className='col-6'>
                                 <h5 className= 'm-2'>Name</h5>
@@ -145,14 +143,17 @@ class Shop extends Component{
                         </div>
                         <div className='row'>
                         <div className='col-6'> 
-                        <Button className='mb-2 'style={{backgroundColor:'#CC9966'}} 
+                        <div className='row'>
+                        <Button className='mb-2 mr-2 col-4 'style={{backgroundColor:'#CC9966'}} 
                             onClick={this.onSearchClicked}>
                             Search
                         </Button>
-                        <Button className='mb-2 ' style={{backgroundColor:'#258472'}}
+                        <Button className='mb-2 col-4' style={{backgroundColor:'#258472'}}
                             onClick={this.onResetClicked}>
                             Reset
                         </Button>
+                        </div>
+                        
                         </div>
                         <div className = 'col-6'>
                         <h5 className = 'm-2'

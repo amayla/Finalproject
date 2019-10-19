@@ -73,7 +73,7 @@ class Header extends React.Component {
                 <Collapse isOpen={this.state.isOpen} navbar>
                   <Nav className="ml-auto" navbar>
                   <NavItem>
-                      <NavLink href="/shop">
+                      <NavLink href="/shoppingcart">
                       <img src={require("./shopping_cart_PNG46.png")} 
                        height="20" alt="text here"/>
                       </NavLink>
@@ -125,7 +125,7 @@ class Header extends React.Component {
               <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="ml-auto" navbar>
                 <NavItem>
-                    <NavLink href="/">
+                    <NavLink href="/shoppingcart">
                     <img src={require("./shopping_cart_PNG46.png")} 
                      height="20" alt="text here"/>
                     </NavLink>

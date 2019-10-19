@@ -7,13 +7,14 @@ module.exports = {
             if (result.length > 0){
                 let data = result.map(val => {
                     return {
-                        id: val.product_id,
-                        name: val.product_name,
-                        desc: val.product_desc,
-                        price: val.product_price,
-                        picture: val.product_image,
-                        stock: val.product_stock,
-                        category: val.product_category,
+                        userId :val.userId,
+                        product_id: val.product_id,
+                        product_name: val.product_name,
+                        product_desc: val.product_desc,
+                        product_price: val.product_price,
+                        product_picture: val.product_image,
+                        product_stock: val.product_stock,
+                        product_category: val.product_category,
                     }
                 })
                 
@@ -41,12 +42,12 @@ module.exports = {
                 if (result.length > 0){
                     let data = {
                         product_id : result[0].product_id,
-                        name : result[0].product_name,
-                        description: result[0].product_desc,
-                        price : result[0].product_price,
-                        picture: result[0].product_image,
-                        stock : result[0].product_stock,
-                        category : result[0].product_category
+                        product_name : result[0].product_name,
+                        product_desc: result[0].product_desc,
+                        product_price : result[0].product_price,
+                        product_picture: result[0].product_image,
+                        product_stock : result[0].product_stock,
+                        product_category : result[0].product_category
                         
                         
                     }
