@@ -9,10 +9,12 @@ I created a model of e commerce website for a tea shop company. I use a communit
 - database import with json server
 - databased import with sql server
 - added product page
+-shopping cart page
+- check out page
 
 
 #On going updates
-- Shopping Cart, Check Out, & Shipping feature
+- Shipping feature
 - Blog banner & Blogpost layout
 - E invoice generation
 - Review
