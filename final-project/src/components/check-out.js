@@ -3,6 +3,8 @@ import axios from 'axios'
 //klo mau ambil data dr redux state, pakai connect
 import {connect} from "react-redux"
 import {Redirect} from "react-router-dom"
+import { Card, Button, CardHeader, CardBody,
+    CardTitle, CardText } from 'reactstrap'
 
 
 
@@ -15,7 +17,14 @@ class checkout extends Component{
             
                 // ditaruh di state
                 carts:[],
-                checkout:null
+                checkout:null,
+                recipient_name:'',
+                recipient_address:'',
+                recipient_pcode:'',
+                recipient_city:'',
+                recipient_district:'',
+                recipient_phone:'',
+                recipient_note:''
                 
         
             }
@@ -68,25 +77,54 @@ class checkout extends Component{
         }
     
    
-    renderCheckoutFoot = () => {
-        let total = 0
+    renderPurchase = () => {
+        let purchase = 0
 
         this.state.carts.forEach((cart) => {
-            total += (cart.product_qty * cart.product_price)
+            purchase += (cart.product_qty * cart.product_price)
         })
 
         return (
             <tr>
-                <th colSpan='4'>TOTAL</th>
-                <td>Rp.{total.toLocaleString('id')}</td>
+                <td colSpan='4'>Purchase</td>
+                <td>Rp.{purchase.toLocaleString('id')}</td>
             </tr>
         )
     }
 
     renderShipping = () => {
-
+        let shipping = 0
+        return (
+            <tr>
+                <td colSpan='4'>Shipping</td>
+                <td>Rp.{shipping.toLocaleString('id')}</td>
+            </tr>
+        )
         
     }
+    // renderContactcard = () => {
+    //     return (
+    //         <div>
+    //           <Card>
+    //             <CardHeader>Shipping Details</CardHeader>
+    //             <CardBody>
+    //               <CardTitle>{this.recipient_name}</CardTitle>
+    //               <CardText>
+    //                   {this.recipient_address}
+    //                   {this.recipient_province}
+    //                   {this.recipient_city}
+    //                   {this.recipient_district}
+    //                   {this.recipient_pcode}
+    //                   {this.recipient_phone}
+    //               </CardText>
+    //               <Button>Go somewhere</Button>
+    //             </CardBody>
+    //           </Card>
+    //         </div>
+    //       );
+    // }
+    
+
 
      
     render() {
@@ -106,58 +144,66 @@ class checkout extends Component{
                     </thead>
                     <tbody>
                         {this.cartList()}
-                        {this.renderCheckoutFoot()}
+                        {this.renderPurchase()}
+                        {this.renderShipping()}
                     </tbody>
                 </table>
-                <table className='table text-center col-6'>
-                    <thead>
-                        <th colSpan='6'>
-                            Shipping
-                        </th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Name</td>
-                            <td><input className='form-control'type='text'/></td>
-                        </tr>
-                        <tr>
-                            <td>Address</td>
-                            <td><input className='form-control' type='text'/></td>
-                        </tr>
-                        <tr>
-                            <td>City</td>
-                            <td><input className='form-control' type='text'/></td>
-                        </tr>
-                        <tr>
-                            <td>District</td>
-                            <td><input className='form-control' type='text'/></td>
-                        </tr>
-                        <tr>
-                            <td>Postal Code</td>
-                            <td><input className='form-control' type='text'/></td>
-                        </tr>
-                        <tr>
-                            <td>Mobile Number</td>
-                            <td><input className='form-control' type='text'/></td>
-                        </tr>
-                        <tr>
-                            <td>Note</td>
-                            <td><input className='form-control' type='text'/></td>
-                        </tr>
-                        <tr>
-                            <td>Shipping Method</td>
-                            <td>
-                                <select>
-                                    <option value="volvo">Reguler</option>
-                                    <option value="saab">One Night Service</option>
-                                    <option value="opel">Same Day Service</option>
-                                    <option value="audi">Others..</option>
-                                </select> 
-                            </td>
-                        </tr>
-                    </tbody>
-                    
-                </table>
+                <div className='row'>
+                        <table className='table text-center col-8'>
+                            <thead>
+                                <th colSpan='6'>
+                                    SHIPPING DETAILS
+                                </th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Name</td>
+                                    <td><input ref={(input)=>{this.recipient_name = input}} className='form-control'type='text'/></td>
+                                    <td>Mobile Number</td>
+                                    <td><input ref={(input)=>{this.recipient_phone= input}}  className='form-control' type='text'/></td>
+                                </tr>
+                                <tr>
+                                    <td >Address</td>
+                                    <td colSpan='6'><input ref={(input)=>{this.recipient_address = input}} className='form-control' type='text'/></td>
+                                </tr>
+                                <tr>
+                                    <td>Province</td>
+                                    <td><input ref={(input)=>{this.recipient_city= input}} className='form-control' type='text'/></td>
+                                    <td>City</td>
+                                    <td><input ref={(input)=>{this.recipient_city= input}} className='form-control' type='text'/></td>
+                                </tr>
+                                <tr>
+                                    <td>District</td>
+                                    <td><input ref={(input)=>{this.recipient_district= input}} className='form-control' type='text'/></td>
+                                    <td>Postal Code</td>
+                                    <td><input ref={(input)=>{this.recipient_pcode= input}} className='form-control' type='text'/></td>
+                                </tr>
+                                <tr>
+                                    <td>Note</td>
+                                    <td colSpan='6'><input ref={(input)=>{this.recipient_note= input}} className='form-control' type='text'/></td>
+                                </tr>
+                                <tr>
+                                    <td>Shipping Method</td>
+                                    <td>
+                                        <select>
+                                            <option value="volvo">Reguler</option>
+                                            <option value="saab">One Night Service</option>
+                                            <option value="opel">Same Day Service</option>
+                                            <option value="audi">Others..</option>
+                                        </select> 
+                                    </td>
+                                    <td><button className='btn btn-secondary'>Confirm Address</button></td>
+                                </tr>
+                            </tbody>
+                            
+                        </table>
+
+                        <div className='col-4'>
+                        <h1>TEST</h1>
+                        </div>
+                </div>
+                
+                
 
                 <div className='text-right'>
                 <button href='/payment' className='btn btn-primary'>Proceed To Payment</button>
