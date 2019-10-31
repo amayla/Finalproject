@@ -2,7 +2,7 @@ const db = require ('../database')
 
 module.exports={
     addToCart:(req,res) => {
-        let sql = `INSERT INTO carts (user_id, product_id, product_qty) VALUES (${req.body.user_id},${req.body.product_id},${req.body.product_qty})`
+        let sql = `insert into carts (user_id, product_id, product_qty) VALUES (${req.body.user_id},${req.body.product_id},${req.body.product_qty})`
         db.query(sql, (err, result) => {
             if (err) throw err
           
@@ -42,7 +42,7 @@ module.exports={
     },
     
     updateCart:(req,res) => {
-        let sql = `UPDATE carts set product_qty=${req.body.product_qty} WHERE cart_id=${req.body.cart_id}` 
+        let sql = `update carts set product_qty=${req.body.product_qty} WHERE cart_id=${req.body.cart_id}` 
         db.query(sql, (err, result) => {
             if (err) throw err
            

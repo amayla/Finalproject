@@ -6,6 +6,8 @@ import {Redirect} from "react-router-dom"
 import { Card, Button, CardHeader, CardBody,
     CardTitle, CardText } from 'reactstrap'
 
+import moment from 'moment'
+
 
 
 
@@ -17,35 +19,35 @@ class checkout extends Component{
             
                 // ditaruh di state
                 carts:[],
-                checkout:null,
+                
                 recipient_name:'',
                 recipient_address:'',
+                recipient_province:'',
                 recipient_pcode:'',
                 recipient_city:'',
                 recipient_district:'',
                 recipient_phone:'',
                 recipient_note:''
+                // province_list:[],
+                // city_list:[],
+                // province_id:''
+                
                 
         
             }
         }
         
-        componentDidMount(){
+    componentDidMount(){
             this.getData()
+            //this.getProvince()
+   
            
         }
 
-        onCheckoutClick = () => {
-            this.setState((state) => {
-                return {
-                    checkout: this.state.carts
-                }
-            })
-        }
     
 
         //if cart empty, do not run get data function.
-        getData = () => {
+    getData = () => {
             axios.get(
                 'http://localhost:1001/carts',
                 {
@@ -54,15 +56,14 @@ class checkout extends Component{
                     }
                 }
             ).then(res => {
-               
+                console.log(res.data.results)
                 this.setState({carts: res.data.results})
             })
         }
             
 
-        cartList = () => {
-            //  render list
-            
+    cartList = () => {
+            //  render list        
             return this.state.carts.map((cart,index) => {
                return (
                 <tr key = {index}>
@@ -79,55 +80,305 @@ class checkout extends Component{
    
     renderPurchase = () => {
         let purchase = 0
+        let shipping = 0
+       
 
         this.state.carts.forEach((cart) => {
             purchase += (cart.product_qty * cart.product_price)
+            
+        })
+        
+        return (
+           <> 
+                <tr>
+                    <td colSpan='4'>Purchase</td>
+                    <td>Rp.{purchase.toLocaleString('id')}</td>
+                </tr>
+                <tr>
+                    <td colSpan='4'>Shipping</td>
+                    <td>Rp.{shipping.toLocaleString('id')}</td>
+                </tr>
+                <tr style={{fontWeight:'bold'}}>
+                    <td colSpan='4 '>Total</td>
+                    <td>Rp.{`${purchase + shipping}`.toLocaleString('id')}</td>
+                </tr>
+            </>
+            
+  
+        )
+        }
+
+    onProceedtoPaymentCLick = () => {
+
+        axios.post(
+            'http://localhost:1001/checkout',
+            {
+                transaction_id:0,
+                user_id:this.props.user_id,
+                recipient_address:this.state.recipient_address,
+                recipient_phone:this.state.recipient_phone,
+                transaction_date: moment(new Date()).format('YYYY-MM-DD kk:mm:ss.SSS'),
+                recipient_name:this.state.recipient_name,
+                recipient_note:this.state.recipient_note,
+                carts:this.state.carts
+
+            }
+        ).then((res)=>{
+            alert('Berhasil')
+            this.getData()
+            
+            axios.delete(
+                `http://localhost:1001/checkout`, {
+                    data: {
+                        user_id: this.props.user_id
+                    }
+                })
+            .then(() => {
+                this.getData()
+                // console.log(`barang berhasil dihapus `)
+            })
+        
+        }).catch((err)=>{
+            console.log(err)
+            alert('Gagal,coba buka console')
         })
 
-        return (
-            <tr>
-                <td colSpan='4'>Purchase</td>
-                <td>Rp.{purchase.toLocaleString('id')}</td>
-            </tr>
-        )
     }
 
-    renderShipping = () => {
-        let shipping = 0
+
+    // renderShipping = () => {
+    //     let shipping = 0
+    //     // if(purchase <200000){shipping==10000}
+    //     // else if(purchase>200000){
+    //     //     shipping == 0
+    //     // }
+    //     return (
+    //         <tr>
+    //             <td colSpan='4'>Shipping</td>
+    //             <td>Rp.{shipping.toLocaleString('id')}</td>
+    //         </tr>
+    //     )
+        
+    //     }
+
+
+    renderContactcard = () => {
+       
         return (
-            <tr>
-                <td colSpan='4'>Shipping</td>
-                <td>Rp.{shipping.toLocaleString('id')}</td>
-            </tr>
+            <div>
+              <Card>
+                <CardHeader>Shipping Details</CardHeader>
+                <CardBody>
+                  <CardTitle>{this.state.recipient_name}</CardTitle>
+                  <CardText>
+                    phone : {this.state.recipient_phone}<br/>
+                    Address : <br/>
+                    {this.state.recipient_address}<br/>
+                    {this.state.recipient_province}<br/>
+                    {this.state.recipient_city}<br/>
+                    {this.state.recipient_pcode}<br/>
+                  </CardText>
+                  <Button>Save Address</Button>
+                  <Button style={{marginLeft:2}} onClick={this.onProceedtoPaymentCLick}>Proceed To Payment</Button>
+                  
+                </CardBody>
+              </Card>
+            </div>
+          );
+          
+        }
+
+
+    // getProvince = () => {
+    //     axios.get(
+    //         `http://api.shipping.esoftplay.com/province`,
+            
+                
+    //     ).then(res => {
+            
+    //         this.setState({
+    //             // province_id:res.data.province_id,
+    //             province_list:res.data.result
+    //         })
+    //     })
+    //     }
+        
+
+    // provinceList = () => {
+    //     return this.state.province_list.map((data,index) => {
+           
+    //         return(
+                
+    //                 <option value={JSON.stringify(data)} data={data.province} key={index}>{data.province}</option>
+                
+    //         )
+    //     })
+
+    //     }
+
+    // getCity = () => {
+    //     axios.get(
+    //         `http://api.shipping.esoftplay.com/city/${this.state.province_id}`,
+           
+                
+    //     ).then(res => {
+    //         // console.log(res.data)
+    //         this.setState({
+    //             // province_id:res.data.province_id,
+    //             city_list:res.data.result
+    //         })
+    //     })
+
+    //     }
+
+    // cityList = () => {
+
+    //     return this.state.city_list.map((data,index) => {
+    //         return(
+                
+    //                 <option value={JSON.stringify(data)} key={index}>{data.city_name}</option>
+                
+    //         )
+    //     })
+
+    //     }
+        
+
+    // pcodeList = () => {
+
+    //     return this.state.city_list.map((data,index) => {
+    //         return(
+                
+    //                 <option value={data.postal_code} key={index}>{data.postal_code}</option>
+                
+    //         )
+    //     })
+
+    //     }
+
+    saveAddress = () => {
+        axios.post(
+            'http://localhost:1001/products',
+            {
+                id_transaksi:1,
+                user_id:this.state.auth.id,
+                user_address:JSON.parse(this.state.recipient_address+this.state.recipient_province),
+                mobile_phone:this.state.recipient_phone,
+                transaction_date: Date.now(),
+                recipient_name:this.state.recipient_name,
+                address_remark:this.state.recipient_note
+            }
+        ).then((res)=>{
+            alert('Berhasil')
+        
+        }).catch((err)=>{
+            console.log(err)
+            alert('Gagal,coba buka console')
+        })
+
+    }
+
+    shippingForm = () => {
+        return(
+            <table className='table text-center col-7'>
+                            <thead>
+                                <tr>
+                                <th colSpan='4'>
+                                  SHIPPING FORM
+                                </th>
+                                </tr>
+                               
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Name</td>
+                                    <td><input onChange = {event => 
+                                        this.setState({ recipient_name: event.target.value })}
+                                        className='form-control'type='text'/>
+                                    </td>
+                                    <td>Mobile Number</td>
+                                    <td><input onChange = {event => 
+                                        this.setState({ recipient_phone: event.target.value })}
+                                        className='form-control' type='text'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td >Address</td>
+                                    <td colSpan='4'>
+                                        <input onChange = {event => 
+                                        this.setState({ recipient_address: event.target.value })} 
+                                        className='form-control' type='text'/>
+                                    </td>
+                                </tr>
+                                <tr >
+                                    <td>Province</td>
+                                    <td>
+                                    <input onChange = {event => 
+                                        this.setState({ recipient_province: event.target.value })} 
+                                        className='form-control' type='text'/>
+                                        {/* <select className='form-control' onChange = {event => 
+                                        this.setState({ province_id: JSON.parse(event.target.value).province_id,
+                                                        recipient_province:JSON.parse(event.target.value).province})}>
+                                            <option>Select Province</option>
+                                            {this.provinceList()}
+                                            {this.getCity()}
+                                        </select> */}
+                                        
+                                    </td>
+                                    <td>City</td>
+                                    <td>
+                                        <input onChange = {event => 
+                                        this.setState({ recipient_city: event.target.value })} 
+                                        className='form-control' type='text'/>
+                                        {/* <select className='form-control' onChange = {event => 
+                                        this.setState({city_id: JSON.parse(event.target.value).city_id,
+                                                        recipient_city:JSON.parse(event.target.value).city_name})}>
+                                             <option>Select City</option>
+                                            {this.cityList()}
+                                        </select> */}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Postal Code</td>
+                                    <td>
+                                        <input onChange = {event => 
+                                        this.setState({ recipient_pcode: event.target.value })} 
+                                        className='form-control' type='text'/>
+
+                                        {/* <select className='form-control' onChange = {event => 
+                                        this.setState({recipient_pcode: event.target.value })}>
+                                            <option>Select Postal Code</option>
+                                            {this.pcodeList()}
+                                        </select> */}
+                                    </td>
+                                    <td>Shipping Method</td>
+                                    <td>
+                                        <select>
+                                            <option value="reguler">Reguler (3-5 days)</option>
+                                            <option value="express">One Night Service</option>
+                                            <option value="sameday">Same Day Service</option>
+                                        </select> 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Note</td>
+                                    <td colSpan='4'><input placeholder='example: Please deliver on working hours!' onChange = {event => 
+                                        this.setState({ recipient_note: event.target.value })} 
+                                        className='form-control' type='text'/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            
+                        </table>
         )
         
+
     }
-    // renderContactcard = () => {
-    //     return (
-    //         <div>
-    //           <Card>
-    //             <CardHeader>Shipping Details</CardHeader>
-    //             <CardBody>
-    //               <CardTitle>{this.recipient_name}</CardTitle>
-    //               <CardText>
-    //                   {this.recipient_address}
-    //                   {this.recipient_province}
-    //                   {this.recipient_city}
-    //                   {this.recipient_district}
-    //                   {this.recipient_pcode}
-    //                   {this.recipient_phone}
-    //               </CardText>
-    //               <Button>Go somewhere</Button>
-    //             </CardBody>
-    //           </Card>
-    //         </div>
-    //       );
-    // }
+
     
-
-
      
     render() {
+    
         if(this.props.username){
             return(
                 <div className= 'container'>
@@ -145,69 +396,16 @@ class checkout extends Component{
                     <tbody>
                         {this.cartList()}
                         {this.renderPurchase()}
-                        {this.renderShipping()}
+                        
                     </tbody>
                 </table>
                 <div className='row'>
-                        <table className='table text-center col-8'>
-                            <thead>
-                                <th colSpan='6'>
-                                    SHIPPING DETAILS
-                                </th>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Name</td>
-                                    <td><input ref={(input)=>{this.recipient_name = input}} className='form-control'type='text'/></td>
-                                    <td>Mobile Number</td>
-                                    <td><input ref={(input)=>{this.recipient_phone= input}}  className='form-control' type='text'/></td>
-                                </tr>
-                                <tr>
-                                    <td >Address</td>
-                                    <td colSpan='6'><input ref={(input)=>{this.recipient_address = input}} className='form-control' type='text'/></td>
-                                </tr>
-                                <tr>
-                                    <td>Province</td>
-                                    <td><input ref={(input)=>{this.recipient_city= input}} className='form-control' type='text'/></td>
-                                    <td>City</td>
-                                    <td><input ref={(input)=>{this.recipient_city= input}} className='form-control' type='text'/></td>
-                                </tr>
-                                <tr>
-                                    <td>District</td>
-                                    <td><input ref={(input)=>{this.recipient_district= input}} className='form-control' type='text'/></td>
-                                    <td>Postal Code</td>
-                                    <td><input ref={(input)=>{this.recipient_pcode= input}} className='form-control' type='text'/></td>
-                                </tr>
-                                <tr>
-                                    <td>Note</td>
-                                    <td colSpan='6'><input ref={(input)=>{this.recipient_note= input}} className='form-control' type='text'/></td>
-                                </tr>
-                                <tr>
-                                    <td>Shipping Method</td>
-                                    <td>
-                                        <select>
-                                            <option value="volvo">Reguler</option>
-                                            <option value="saab">One Night Service</option>
-                                            <option value="opel">Same Day Service</option>
-                                            <option value="audi">Others..</option>
-                                        </select> 
-                                    </td>
-                                    <td><button className='btn btn-secondary'>Confirm Address</button></td>
-                                </tr>
-                            </tbody>
-                            
-                        </table>
+                        {this.shippingForm()}
 
                         <div className='col-4'>
-                        <h1>TEST</h1>
+                        {this.renderContactcard()}
                         </div>
                 </div>
-                
-                
-
-                <div className='text-right'>
-                <button href='/payment' className='btn btn-primary'>Proceed To Payment</button>
-            </div>
             </div>
             )    
         } else{

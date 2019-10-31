@@ -30,7 +30,6 @@ class Shop extends Component{
     }
 
     
-    
     onResetClicked = () => {
         this.setState((prevState)=>{
             return{
@@ -104,6 +103,7 @@ class Shop extends Component{
         })
         
     }
+
     render() {
         return (
             

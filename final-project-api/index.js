@@ -5,7 +5,7 @@ var cors = require ('cors')
 
 const app = express()
 const port = 1001
-const { authRouter, productRouter, cartRouter } = require('./routers')
+const { authRouter, productRouter, cartRouter,checkoutRouter } = require('./routers')
 
 
 
@@ -21,5 +21,6 @@ app.get('/', (req, res) => {
 app.use(authRouter)
 app.use(productRouter)
 app.use(cartRouter)
+app.use(checkoutRouter)
 
 app.listen(port, () => console.log("Server up in port " + port))
