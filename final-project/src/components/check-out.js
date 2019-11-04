@@ -67,7 +67,7 @@ class checkout extends Component{
             return this.state.carts.map((cart,index) => {
                return (
                 <tr key = {index}>
-                    <td>{cart.product_id}</td>
+                    <td></td>
                     <td>{cart.product_name}</td>
                     <td>{cart.product_desc}</td>
                     <td>{cart.product_qty}</td>
@@ -119,28 +119,58 @@ class checkout extends Component{
                 recipient_phone:this.state.recipient_phone,
                 transaction_date: moment(new Date()).format('YYYY-MM-DD kk:mm:ss.SSS'),
                 recipient_name:this.state.recipient_name,
+                recipient_province:this.state.recipient_province,
+                recipient_city:this.state.recipient_city,
+                recipient_pcode:this.state.recipient_pcode,
                 recipient_note:this.state.recipient_note,
                 carts:this.state.carts
 
             }
         ).then((res)=>{
             alert('Berhasil')
-            this.getData()
+           
             
             axios.delete(
                 `http://localhost:1001/checkout`, {
                     data: {
                         user_id: this.props.user_id
                     }
-                })
-            .then(() => {
-                this.getData()
-                // console.log(`barang berhasil dihapus `)
+            }).then( res2 => {
+                this.props.history.push(`/payment/${res.data.results.insertId}`)
             })
+
+                
+          
         
         }).catch((err)=>{
             console.log(err)
             alert('Gagal,coba buka console')
+        })
+
+    }
+
+    onSaveAddress = () => {
+
+        axios.post(
+            'http://localhost:1001/address',
+            {
+                user_id:this.props.user_id,
+                recipient_address:this.state.recipient_address,
+                recipient_phone:this.state.recipient_phone,
+                recipient_name:this.state.recipient_name,
+                recipient_note:this.state.recipient_note,
+
+            }
+        ).then((res)=>{
+            alert('Berhasil')
+            
+            .then(() => {
+                console.log(`your address is saved `)
+            })
+        
+        }).catch((err)=>{
+            console.log(err)
+            alert('Check console')
         })
 
     }
@@ -171,18 +201,19 @@ class checkout extends Component{
                 <CardBody>
                   <CardTitle>{this.state.recipient_name}</CardTitle>
                   <CardText>
-                    phone : {this.state.recipient_phone}<br/>
-                    Address : <br/>
+                    {this.state.recipient_phone}<br/>
+                    <br/>
                     {this.state.recipient_address}<br/>
                     {this.state.recipient_province}<br/>
                     {this.state.recipient_city}<br/>
                     {this.state.recipient_pcode}<br/>
                   </CardText>
-                  <Button>Save Address</Button>
-                  <Button style={{marginLeft:2}} onClick={this.onProceedtoPaymentCLick}>Proceed To Payment</Button>
+                  <Button style={{backgroundColor:'#258472'}}>Save Address</Button>
+                  <Button style={{marginLeft:2,backgroundColor:'#CC9966'}} onClick={this.onProceedtoPaymentCLick}>Proceed To Payment</Button>
+                      
                   
                 </CardBody>
-              </Card>
+              </Card> 
             </div>
           );
           
@@ -280,96 +311,88 @@ class checkout extends Component{
 
     shippingForm = () => {
         return(
-            <table className='table text-center col-7'>
-                            <thead>
-                                <tr>
-                                <th colSpan='4'>
-                                  SHIPPING FORM
-                                </th>
-                                </tr>
-                               
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Name</td>
-                                    <td><input onChange = {event => 
-                                        this.setState({ recipient_name: event.target.value })}
-                                        className='form-control'type='text'/>
-                                    </td>
-                                    <td>Mobile Number</td>
-                                    <td><input onChange = {event => 
-                                        this.setState({ recipient_phone: event.target.value })}
-                                        className='form-control' type='text'/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td >Address</td>
-                                    <td colSpan='4'>
-                                        <input onChange = {event => 
-                                        this.setState({ recipient_address: event.target.value })} 
-                                        className='form-control' type='text'/>
-                                    </td>
-                                </tr>
-                                <tr >
-                                    <td>Province</td>
-                                    <td>
-                                    <input onChange = {event => 
-                                        this.setState({ recipient_province: event.target.value })} 
-                                        className='form-control' type='text'/>
-                                        {/* <select className='form-control' onChange = {event => 
-                                        this.setState({ province_id: JSON.parse(event.target.value).province_id,
-                                                        recipient_province:JSON.parse(event.target.value).province})}>
-                                            <option>Select Province</option>
-                                            {this.provinceList()}
-                                            {this.getCity()}
-                                        </select> */}
-                                        
-                                    </td>
-                                    <td>City</td>
-                                    <td>
-                                        <input onChange = {event => 
-                                        this.setState({ recipient_city: event.target.value })} 
-                                        className='form-control' type='text'/>
-                                        {/* <select className='form-control' onChange = {event => 
-                                        this.setState({city_id: JSON.parse(event.target.value).city_id,
-                                                        recipient_city:JSON.parse(event.target.value).city_name})}>
-                                             <option>Select City</option>
-                                            {this.cityList()}
-                                        </select> */}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Postal Code</td>
-                                    <td>
-                                        <input onChange = {event => 
-                                        this.setState({ recipient_pcode: event.target.value })} 
-                                        className='form-control' type='text'/>
+            
+                        <div className = 'col-7'>
+                            <Card className='row'>
+                            <CardHeader>Shipping Form</CardHeader>
+                                <CardBody>
+                                
+                                    <div className='row p-2'>
 
-                                        {/* <select className='form-control' onChange = {event => 
-                                        this.setState({recipient_pcode: event.target.value })}>
-                                            <option>Select Postal Code</option>
-                                            {this.pcodeList()}
-                                        </select> */}
-                                    </td>
-                                    <td>Shipping Method</td>
-                                    <td>
-                                        <select>
-                                            <option value="reguler">Reguler (3-5 days)</option>
-                                            <option value="express">One Night Service</option>
-                                            <option value="sameday">Same Day Service</option>
-                                        </select> 
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Note</td>
-                                    <td colSpan='4'><input placeholder='example: Please deliver on working hours!' onChange = {event => 
-                                        this.setState({ recipient_note: event.target.value })} 
-                                        className='form-control' type='text'/>
-                                    </td>
-                                </tr>
-                            </tbody>
-                            
-                        </table>
+                                        <div className='col-4 pr-0'>
+                                        Name :
+                                        </div>
+                                            <input onChange = {event => 
+                                            this.setState({ recipient_name: event.target.value })}
+                                            className='form-control col-8'type='text'/>
+                                            <br/>
+
+                                    </div>
+                                    <div className='row p-2'>
+                                        <div className='col-4 pr-0'>
+                                        Phone :
+                                        </div> 
+
+                                            <input onChange = {event => 
+                                            this.setState({ recipient_phone: event.target.value })}
+                                            className='form-control col-8'type='text'/>
+                                            <br/>     
+
+                                    </div>
+                                        <div className='row p-2'>
+                                            <div className='col-4 pr-0'>
+                                            Address :
+                                            </div> 
+                                            <input onChange = {event => 
+                                            this.setState({ recipient_address: event.target.value })}
+                                            className='form-control col-8'type='text'/>
+                                            <br/>
+
+                                        </div>
+                                        <div className='row p-2'>
+                                            <div className='col-4 pr-0'>
+                                            Province: 
+                                            </div> 
+                                            <input onChange = {event => 
+                                            this.setState({ recipient_province: event.target.value })}
+                                            className='form-control col-8'type='text'/>
+                                            <br/>
+                                        </div>
+                                
+                                        <div className='row p-2'>
+                                            <div className='col-4 pr-0'>
+                                            City : 
+                                            </div> 
+                                            <input onChange = {event => 
+                                            this.setState({ recipient_city: event.target.value })}
+                                            className='form-control col-8'type='text'/>
+                                            <br/>
+                                        </div>
+                                        <div className='row p-2'>
+                                            <div className='col-4 pr-0'>
+                                            Postal Code : 
+                                            </div> 
+                                            <input onChange = {event => 
+                                            this.setState({ recipient_pcode: event.target.value })}
+                                            className='form-control col-8'type='text'/>
+                                            <br/>
+                                        </div>
+                                        <div className='row p-2'>
+                                            <div className='col-4 pr-0'>
+                                            Note : 
+                                            </div> 
+                                            <input onChange = {event => 
+                                            this.setState({ recipient_note: event.target.value })}
+                                            className='form-control col-8'type='text'/>
+                                            <br/>
+                                        </div>
+                                
+                                </CardBody>
+
+                            </Card>
+                        </div>
+
+                        
         )
         
 
@@ -382,11 +405,11 @@ class checkout extends Component{
         if(this.props.username){
             return(
                 <div className= 'container'>
-                <h1 className='display-4 text-center'>Check Out</h1>
+                <h4 style={{padding:20}}>Check Out</h4>
                 <table className='table text-center'>
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th></th>
                             <th>NAME</th>
                             <th>DESC</th>
                             <th>QTY</th>
@@ -402,7 +425,7 @@ class checkout extends Component{
                 <div className='row'>
                         {this.shippingForm()}
 
-                        <div className='col-4'>
+                        <div className='col-5'>
                         {this.renderContactcard()}
                         </div>
                 </div>

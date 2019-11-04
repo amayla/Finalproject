@@ -72,7 +72,7 @@ class ShoppingCart extends Component{
             return this.state.carts.map((cart,index) => {
                return (
                 <tr key = {index}>
-                    <td>{cart.product_id}</td>
+                    
                     <td>{cart.product_name}</td>
                     <td>{cart.product_desc}</td>
                     <td>Rp.{cart.product_price.toLocaleString('id')}</td>
@@ -114,11 +114,11 @@ class ShoppingCart extends Component{
         if(this.props.username){
             return(
                 <div className='container'>
-                <h1 className='display-4 text-center'>Shopping Cart</h1>
+                <h4 style={{padding:20}}>Shopping Cart</h4>
                 <table className='table text-center'>
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            
                             <th>NAME</th>
                             <th>DESC</th>
                             <th>PRICE</th>
@@ -132,7 +132,7 @@ class ShoppingCart extends Component{
                     </tbody>
                 </table>
                 <div className='text-center'>
-                    <a href='/checkout'><button className='btn btn-primary'>Checkout</button></a>
+                    <a href='/checkout'><button className='btn mb-2 mr-2 col-4 'style={{backgroundColor:'#CC9966',color:'white'}} >Checkout</button></a>
                 </div>
                 
                 

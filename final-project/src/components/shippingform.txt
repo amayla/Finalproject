@@ -1,0 +1,90 @@
+// <table className='table text-center col-7'>
+            //                 <thead>
+            //                     <tr>
+            //                     <th colSpan='4'>
+            //                       SHIPPING FORM
+            //                     </th>
+            //                     </tr>
+                               
+            //                 </thead>
+            //                 <tbody>
+            //                     <tr>
+            //                         <td>Name</td>
+            //                         <td><input onChange = {event => 
+            //                             this.setState({ recipient_name: event.target.value })}
+            //                             className='form-control'type='text'/>
+            //                         </td>
+            //                         <td>Mobile Number</td>
+            //                         <td><input onChange = {event => 
+            //                             this.setState({ recipient_phone: event.target.value })}
+            //                             className='form-control' type='text'/>
+            //                         </td>
+            //                     </tr>
+            //                     <tr>
+            //                         <td >Address</td>
+            //                         <td colSpan='4'>
+            //                             <input onChange = {event => 
+            //                             this.setState({ recipient_address: event.target.value })} 
+            //                             className='form-control' type='text'/>
+            //                         </td>
+            //                     </tr>
+            //                     <tr >
+            //                         <td>Province</td>
+            //                         <td>
+            //                         <input onChange = {event => 
+            //                             this.setState({ recipient_province: event.target.value })} 
+            //                             className='form-control' type='text'/>
+            //                             {/* <select className='form-control' onChange = {event => 
+            //                             this.setState({ province_id: JSON.parse(event.target.value).province_id,
+            //                                             recipient_province:JSON.parse(event.target.value).province})}>
+            //                                 <option>Select Province</option>
+            //                                 {this.provinceList()}
+            //                                 {this.getCity()}
+            //                             </select> */}
+                                        
+            //                         </td>
+            //                         <td>City</td>
+            //                         <td>
+            //                             <input onChange = {event => 
+            //                             this.setState({ recipient_city: event.target.value })} 
+            //                             className='form-control' type='text'/>
+            //                             {/* <select className='form-control' onChange = {event => 
+            //                             this.setState({city_id: JSON.parse(event.target.value).city_id,
+            //                                             recipient_city:JSON.parse(event.target.value).city_name})}>
+            //                                  <option>Select City</option>
+            //                                 {this.cityList()}
+            //                             </select> */}
+            //                         </td>
+            //                     </tr>
+            //                     <tr>
+            //                         <td>Postal Code</td>
+            //                         <td>
+            //                             <input onChange = {event => 
+            //                             this.setState({ recipient_pcode: event.target.value })} 
+            //                             className='form-control' type='text'/>
+
+            //                             {/* <select className='form-control' onChange = {event => 
+            //                             this.setState({recipient_pcode: event.target.value })}>
+            //                                 <option>Select Postal Code</option>
+            //                                 {this.pcodeList()}
+            //                             </select> */}
+            //                         </td>
+            //                         <td>Shipping Method</td>
+            //                         <td>
+            //                             <select>
+            //                                 <option value="reguler">Reguler (3-5 days)</option>
+            //                                 <option value="express">One Night Service</option>
+            //                                 <option value="sameday">Same Day Service</option>
+            //                             </select> 
+            //                         </td>
+            //                     </tr>
+            //                     <tr>
+            //                         <td>Note</td>
+            //                         <td colSpan='4'><input placeholder='example: Please deliver on working hours!' onChange = {event => 
+            //                             this.setState({ recipient_note: event.target.value })} 
+            //                             className='form-control' type='text'/>
+            //                         </td>
+            //                     </tr>
+            //                 </tbody>
+                            
+            //             </table>

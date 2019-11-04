@@ -25,9 +25,31 @@ export const keepLogin = (objUser) => {
 
 
 
+
+
 export const onLogoutUser = () => {
     localStorage.removeItem('userData')
     return{
         type: 'LOGOUT_SUCCESS'
+    }
+}
+
+
+export const onCart = (cart) => {
+
+    return{
+        type: "CART_UPDATED",
+        payload: {
+            cart
+        }
+    }
+}
+
+export const keepCart = (cart) => {
+    return {
+        type:'CART_UPDATED',
+        payload:{
+            cart
+        }
     }
 }
