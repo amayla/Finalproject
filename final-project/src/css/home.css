@@ -4,3 +4,27 @@
     
 }
 
+#image { 
+    position: relative; 
+    height: 100%;
+    width: 100% 
+ }
+ 
+ #h3 { 
+    position: absolute; 
+    top: 300px; 
+    left: auto;
+    right:auto; 
+    width: auto;
+    text-align: center; 
+ }
+
+ #h3bottom { 
+    position: absolute; 
+    top: 300px; 
+    left: 0px; 
+    width: 100%; 
+ }
+
+ 
+

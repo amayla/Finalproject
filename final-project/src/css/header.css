@@ -88,121 +88,22 @@ body {
     }
 
 
-
-
-
-/* .nav-link{
-    color: #BEAC74 !important;
-    font-family: 'arial';
-    font-size:16px;
-    margin-left: 30px
-}
-
-.navbar, .dropdown-menu, .dropdown-item{
-    background-color: #ffffff;
-    color:#BEAC74 !important;
-    border-bottom: white 5px
-
-} */
-
-/* .navbar{
-    padding: 20px;
-    margin: 20px
-} */
-
-
-/* .navbar-brand > img {
-    display: 'block';
-    
-  }
- */
-
-
-
-
-
-/* #SITE_HEADER {
-
-    height: auto;
+div#promo-msg a{
+    display: block;
+    float: left;
     width: 100%;
-    position: relative;
-
-}
-.style-header {
-
-    position: absolute;
+    position: fixed;
     top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-
+    color:
+    #fff;
+    text-align: center;
+    height: 45px;
+    text-transform: uppercase;
+    z-index: 999;
+    letter-spacing: 2px;
+    background:#258472
 }
 
-a, abbr, acronym, address, 
-applet, b, big, blockquote, 
-body, button, caption, center, 
-cite, code, dd, del, dfn, div, 
-dl, dt, em, fieldset, font, footer, 
-form, h1, h2, h3, h4, h5, h6, header, 
-html, i, iframe, img, ins, kbd, label, 
-legend, li, nav, object, ol, p, pre, q, 
-s, samp, section, small, span, strike, 
-strong, sub, sup, table, tbody, td, tfoot, 
-th, thead, title, tr, tt, u, ul, var {
-
-    margin: 0;
-    padding: 0;
-    border: 0;
-    outline: 0;
-    vertical-align: baseline;
-    background: 0 0;
-    background-color: rgba(0, 0, 0, 0);
-    background-position-x: 0px;
-    background-position-y: 0px;
-    background-repeat: repeat;
-    background-attachment: scroll;
-    background-image: none;
-    background-size: auto;
-    background-origin: padding-box;
-    background-clip: border-box;
 
 
 
-}
-
-body {
-
-    font-size: 10px;
-    font-family: Arial,Helvetica,sans-serif;
-}
-
-#SITE_HEADERinlineContent-gridWrapper {
-
-    pointer-events: none;
-
-}
-
-element {
-
-    width: 789px;
-    height: 50px;
-    overflow-x: visible;
-
-}
-
-#SITE_HEADERinlineContent-gridContainer > * {
-
-    pointer-events: auto;
-
-}
-
-#comp-ik5lvlkz {
-
-    position: relative;
-    margin: 12px 0px 13px calc((100% - 980px) * 0.5);
-    left: 95px;
-    grid-area: 1 / 1 / 2 / 2;
-    justify-self: start;
-    align-self: start;
-
-} */

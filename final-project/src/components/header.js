@@ -40,126 +40,157 @@ class Header extends React.Component {
     render() {
       if(!this.props.username){
         return (
-          <div style={{backgroundColor:'#ffff'}}>
-            <Navbar light expand="md" style={{backgroundColor:'#ffff'}}>
-              <NavbarBrand href="/" style={{color:'#BEAC74'}}>
-                  <img src={require("./Comoditea.png")} 
-                  height="70" alt="text here"/>
-              </NavbarBrand>
-              <NavbarToggler onClick={this.toggle} />
-              <Collapse isOpen={this.state.isOpen} navbar>
-                <Nav className="ml-auto" navbar>
-                  <NavItem>
-                  <NavLink className = 'ml-4' href="/register" style= {{fontFamily:'Comfortaa'}}>Register</NavLink>
-                  </NavItem>
-                  <NavItem>
-                  <NavLink className = 'ml-4' href="/login" style= {{fontFamily:'Comfortaa'}}>Log In</NavLink>
-                  </NavItem>
-                </Nav>
-              </Collapse>
-            </Navbar>
-          </div>
+
+              <div style={{borderBottom:'1px solid #d5d8dc' }}>
+                    <div id='promo-msg' style={{textAlign:'center', color:'white', backgroundColor:'#CC9966'}}>
+                        <div class='container'style={{textAlign:'center', color:'#CC9966', backgroundColor:'#CC9966', fontSize:'7px'}}>
+                          ::before
+                            <h6 style={{textAlign:'center', color:'white', backgroundColor:'#CC9966', marginTop:'3px'}}>Free domestic shipping with minimum purchase of IDR 50k</h6>
+                          ::after
+                        </div>
+                    </div>
+                    <div className='container' style={{backgroundColor:'#ffff'}}>
+                        <Navbar light expand="md" style={{backgroundColor:'#ffff',border: '1px solid white'}}>
+                            <NavbarBrand href="/" style={{color:'#BEAC74'}}>
+                                <img src={require("./Comoditea.png")} height="70" alt="text here"/>
+                            </NavbarBrand>
+                              <NavbarToggler onClick={this.toggle} />
+                              <Collapse isOpen={this.state.isOpen} navbar>
+                                  <Nav className="ml-auto" navbar>
+                                      <NavItem>
+                                            <NavLink className = 'ml-4' href="/register" style= {{fontFamily:'Comfortaa'}}>Register</NavLink>
+                                      </NavItem>
+                                      <NavItem>
+                                            <NavLink className = 'ml-4' href="/login" style= {{fontFamily:'Comfortaa'}}>Log In</NavLink>
+                                      </NavItem>
+                                  </Nav>
+                              </Collapse>
+                        </Navbar>
+                    </div>
+              </div>
+                    
         );
       } else if (this.props.username === 'admin'){
         return(
           
-            <div style={{backgroundColor:'#ffff'}}>
-              <Navbar light expand="md" style={{backgroundColor:'#ffff'}}>
-                <NavbarBrand href="/" style={{color:'#BEAC74'}}>
-                    <img src={require("./Comoditea.png")} 
-                    height="70" alt="text here"/>
-                    </NavbarBrand>
-                <NavbarToggler onClick={this.toggle} />
-                <Collapse isOpen={this.state.isOpen} navbar>
-                  <Nav className="ml-auto" navbar>
-                  <NavItem>
-                      <NavLink href="/shoppingcart">
-                      <img src={require("./shopping_cart_PNG46.png")} 
-                       height="20" alt="text here"/>
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink className = 'ml-4' href="/shop" style= {{fontFamily:'Comfortaa'}}>Shop</NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink className = 'ml-4' href="/" style= {{fontFamily:'Comfortaa'}}>Blog</NavLink>
-                    </NavItem>
-                    
-                    <NavItem>
-                      <UncontrolledDropdown>
-                    <DropdownToggle className = 'ml-4' nav caret style= {{fontFamily:'Comfortaa'}}>
-                        Options
-                      </DropdownToggle>
-                      <DropdownMenu right>
-                        <DropdownItem style= {{fontFamily:'Comfortaa'}}>
-                          Account
-                        </DropdownItem>
-                        <DropdownItem/>
-                        <DropdownItem href="/manage" style= {{fontFamily:'Comfortaa'}}>
-                          Manage Products
-                        </DropdownItem>
-                        <DropdownItem divider />
-                        <DropdownItem style= {{fontFamily:'Comfortaa'}} onClick={this.onButtonClick}>
-                          Log Out
-                        </DropdownItem>
-                      </DropdownMenu>
-                      </UncontrolledDropdown>
-                    </NavItem>
-                  </Nav>
-                </Collapse>
-              </Navbar>
-            </div>
-          
+              <div style={{borderBottom:'1px solid #d5d8dc' }}>
+                  <div id='promo-msg' style={{textAlign:'center', color:'white', backgroundColor:'#CC9966'}}>
+                      <div class='container'style={{textAlign:'center', color:'#CC9966', backgroundColor:'#CC9966', fontSize:'7px'}}>
+                        ::before
+                          <h6 style={{textAlign:'center', color:'white', backgroundColor:'#CC9966', marginTop:'3px'}}>
+                              Free domestic shipping with minimum purchase of IDR 50k</h6>
+                        ::after
+                      </div>
+                  </div>
+                  <div className='container'>
+                    <Navbar light expand="md" style={{backgroundColor:'#ffff',border: '1px solid white'}}>
+                        <NavbarBrand href="/" style={{color:'#BEAC74'}}>
+                            <img src={require("./Comoditea.png")} height="70" alt="text here"/>
+                        </NavbarBrand>
+                            <NavbarToggler onClick={this.toggle} />
+                                <Collapse isOpen={this.state.isOpen} navbar>
+                                      <Nav className="ml-auto" navbar>
+                                          <NavItem>
+                                              <NavLink href="/shoppingcart">
+                                              <img src={require("./shopping_cart_PNG46.png")} height="20" alt="text here"/>
+                                              </NavLink>
+                                          </NavItem>
+                                          <NavItem>
+                                              <NavLink className = 'ml-4' href="/shop" style= {{fontFamily:'Comfortaa'}}>Shop
+                                              </NavLink>
+                                          </NavItem>
+                                          <NavItem>
+                                              <NavLink className = 'ml-4' href="/" style= {{fontFamily:'Comfortaa'}}>Blog
+                                              </NavLink>
+                                          </NavItem>
+                                          <NavItem>
+                                              <UncontrolledDropdown>
+                                                  <DropdownToggle className = 'ml-4' nav caret style= {{fontFamily:'Comfortaa'}}>
+                                                  hello, {this.props.username}
+                                                  </DropdownToggle> 
+                                                    <DropdownMenu right>
+                                                        <DropdownItem style= {{fontFamily:'Comfortaa'}}>
+                                                          Account
+                                                        </DropdownItem>
+                                                        <DropdownItem href="/paymentverification" style= {{fontFamily:'Comfortaa'}}>
+                                                          Payment Verification
+                                                        </DropdownItem>
+                                                        <DropdownItem/>
+                                                        <DropdownItem href="/manage" style= {{fontFamily:'Comfortaa'}}>
+                                                          Manage Products
+                                                        </DropdownItem>
+                                                        <DropdownItem divider />
+                                                        <DropdownItem style= {{fontFamily:'Comfortaa'}} onClick={this.onButtonClick}>
+                                                          Log Out
+                                                        </DropdownItem>
+                                                  </DropdownMenu>   
+                                              </UncontrolledDropdown>
+                                          </NavItem>
+                                      </Nav>
+                                </Collapse>
+                        </Navbar>
+                    </div>
+              </div>
+                  
+              
 
         )
       }
       else{
         return (
-          <div style={{backgroundColor:'#ffff'}}>
-            <Navbar light expand="md" style={{backgroundColor:'#ffff'}}>
-              <NavbarBrand href="/" style={{color:'#BEAC74'}}>
-                  <img src={require("./Comoditea.png")} 
-                  height="70" alt="text here"/>
-                  </NavbarBrand>
-              <NavbarToggler onClick={this.toggle} />
-              <Collapse isOpen={this.state.isOpen} navbar>
-                <Nav className="ml-auto" navbar>
-                <NavItem>
-                    <NavLink href="/shoppingcart">
-                    <img src={require("./shopping_cart_PNG46.png")} 
-                     height="20" alt="text here"/>
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink className = 'ml-4' href="/shop" style= {{fontFamily:'Comfortaa'}}>Shop</NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink className = 'ml-4' href="/" style= {{fontFamily:'Comfortaa'}}>Blog</NavLink>
-                  </NavItem>
-                  
-                  <NavItem>
-                    <UncontrolledDropdown>
-                  <DropdownToggle className = 'ml-4' nav caret style= {{fontFamily:'Comfortaa'}}>
-                      Options
-                    </DropdownToggle>
-                    <DropdownMenu right>
-                      <DropdownItem style= {{fontFamily:'Comfortaa'}}>
-                        Account
-                      </DropdownItem>
-                      <DropdownItem divider />
-                      <DropdownItem style= {{fontFamily:'Comfortaa'}} onClick={this.onButtonClick}>
-                        Log Out
-                      </DropdownItem>
-                    </DropdownMenu>
-                    </UncontrolledDropdown>
-                  </NavItem>
-                </Nav>
-              </Collapse>
-            </Navbar>
-          </div>
+              <div style={{borderBottom:'1px solid #d5d8dc' }}>
+                  <div id='promo-msg' style={{textAlign:'center', color:'white', backgroundColor:'#CC9966'}}>
+                        <div class='container'style={{textAlign:'center', color:'#CC9966', backgroundColor:'#CC9966', fontSize:'7px'}}>
+                          ::before
+                            <h6 style={{textAlign:'center', color:'white', backgroundColor:'#CC9966'}}>
+                              Free domestic shipping with minimum purchase of IDR 50k</h6>
+                          ::after
+                        </div>
+                    </div>
+                    <div style={{backgroundColor:'#ffff'}} className='container'>
+                      <Navbar light expand="md" style={{backgroundColor:'#ffff',border: '1px solid white'}}>
+                          <NavbarBrand href="/" style={{color:'#BEAC74'}}>
+                              <img src={require("./Comoditea.png")} height="70" alt="text here"/>
+                          </NavbarBrand>
+                            <NavbarToggler onClick={this.toggle} />
+                              <Collapse isOpen={this.state.isOpen} navbar>
+                                  <Nav className="ml-auto" navbar>
+                                      <NavItem>
+                                          <NavLink href="/shoppingcart">
+                                              <img src={require("./shopping_cart_PNG46.png")} height="20" alt="text here"/>
+                                          </NavLink>
+                                      </NavItem>
+                                      <NavItem>
+                                          <NavLink className = 'ml-4' href="/shop" style= {{fontFamily:'Comfortaa'}}>Shop</NavLink>
+                                      </NavItem>
+                                      <NavItem>
+                                          <NavLink className = 'ml-4' href="/" style= {{fontFamily:'Comfortaa'}}>Blog</NavLink>
+                                      </NavItem>   
+                                      <NavItem>
+                                          <UncontrolledDropdown>
+                                            <DropdownToggle className = 'ml-4' nav caret style= {{fontFamily:'Comfortaa'}}>
+                                                hello, {this.props.username}
+                                            </DropdownToggle>
+                                                <DropdownMenu right>
+                                                    <DropdownItem style= {{fontFamily:'Comfortaa'}}>
+                                                      Account
+                                                    </DropdownItem>
+                                                    <DropdownItem divider />
+                                                    <DropdownItem style= {{fontFamily:'Comfortaa'}} onClick={this.onButtonClick}>
+                                                      Log Out
+                                                    </DropdownItem>
+                                                </DropdownMenu>
+                                        </UncontrolledDropdown>
+                                      </NavItem>
+                                  </Nav>
+                              </Collapse>
+                      </Navbar>
+                  </div>
+              </div>
+              
         )
       }
-      ;
+      
     }
   }
 

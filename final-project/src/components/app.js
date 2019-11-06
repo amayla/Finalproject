@@ -10,6 +10,8 @@ import ShoppingCart from './ShoppingCart'
 import checkout from './check-out'
 import Payment from './payment'
 import ProductDetail from './productDetail'
+import PaymentVerification from './paymentVerification'
+import Footer from './footer'
 //import Checkout from './checkOut'
 import { keepLogin } from '../actions/index'
 import { connect } from  'react-redux'
@@ -55,7 +57,8 @@ class App extends Component{
                 <Route path='/checkout' component={checkout}/>
                 <Route path='/payment/:id' component={Payment}/>
                 <Route path='/productdetail/:id' component={ProductDetail}/>
-                
+                <Route path='/paymentverification' component={PaymentVerification}/>
+                <Footer/>
                 </BrowserRouter>
             </div>
                 

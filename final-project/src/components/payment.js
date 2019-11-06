@@ -1,37 +1,19 @@
 import React, {Component} from "react"
 import axios from 'axios'
-//klo mau ambil data dr redux state, pakai connect
 import {connect} from "react-redux"
 import {Redirect} from "react-router-dom"
-// import { Card, CardHeader, CardBody,
-//     CardTitle, CardText } from 'reactstrap'
-
-// import moment from 'moment'
 
 
 
-
-//fung render butuh data, ambil data di comp. did mount, runningnya kedua setelah data diambil pertama kali
 class Payment extends Component{
     constructor(props){
         super(props)
         this.state= {
-            
-                // ditaruh di state
+        
                 transaction:'',
-                // user_id:'',
-                // recipient_name:'',
-                // recipient_address:'',
-                // recipient_province:'',
-                // recipient_pcode:'',
-                // recipient_city:'',
-                // recipient_district:'',
-                // recipient_phone:'',
-                // recipient_note:''
-                // province_list:[],
-                // city_list:[],
-                // province_id:''
-                
+                bankName:'',
+                bankAccountName:'',
+                transferProof:''
                 
         
             }
@@ -45,18 +27,12 @@ class Payment extends Component{
            
         }
 
-    
-        //if cart empty, do not run get data function.
+           
     getData = () => {
             axios.get(
-                `http://localhost:1001/checkout`,
-                {
-                    params: {
-                        transaction_id: this.props.match.params.id
-                    }
-                }
+                `http://localhost:1001/transaction/${this.props.match.params.id}`
             ).then(res => {
-                console.log(res.data.results[0])
+                console.log(res.data.results)
                 this.setState({transaction: res.data.results[0]})
             })
         }
@@ -114,8 +90,6 @@ class Payment extends Component{
         
         }
 
-
-
     renderContactcard = () => {
        
         return (
@@ -133,6 +107,118 @@ class Payment extends Component{
           
         }
 
+    renderUpload = () => {
+            if(!this.state.transaction.bank_transfer_proof){
+                if(this.state.transaction.status === "Cancelled"){
+                    return (
+                        <div className="col-12">
+                            <p>Transaction cancelled.</p>
+                        </div> 
+                    )
+                } else {
+                    return (
+                        <div className='row'>
+                            <div>
+                                <div className='row'>
+                                <div className='col-4'>
+                                <p style={{fontSize:'14px'}}>Bank Name</p>  
+                            </div>
+                            <div className='col-7'>
+                            <input onChange={e => this.setState({bankName: e.target.value})} className="form-control mb-2"/>
+                            </div>
+                            <div className='col-4'>
+                                 <p style={{fontSize:'14px'}}>Account Name</p>
+                            
+                            </div>
+                            <div className='col-7'>
+                            <input onChange={e => this.setState({bankAccountName: e.target.value})} type="text" className="form-control mb-2"/>
+                            </div>
+                            <div className='col-4'>
+                                 <p style={{fontSize:'14px'}}>Proof of Transfer</p>
+                            </div>
+                            <div className='col-7'>
+                            <input onChange={e => this.setState({transferProof: e.target.files[0]})} type="file" className="form-control" style={{textAlign:'center', fontSize:'14px'}}/>
+                            </div> 
+
+                                </div>
+                            </div>
+                            
+                        </div>
+                    )
+                }
+            } else {
+                return (
+                    <div className="col-12">
+                        <p>Transfer proof</p>
+                        <div className="row">
+                            <div className="col-2">
+                                <a href={'http://localhost:1001/files/transfer/' + this.state.transaction.transfer_proof} target="_blank" rel="noopener noreferrer">
+                                    <img src={'http://localhost:1001/files/transfer/' + this.state.transaction.transfer_proof} alt={this.state.transaction.transaction_id} width="150"/>
+                                </a>
+                            </div>
+                            <div className="col-10">
+                                <div>Bank Name: {this.state.transaction.transfer_bank_name}</div>
+                                <div>Account Holder Name: {this.state.transaction.transfer_account_holder}</div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+        }
+    
+    renderButton = () => {
+            if(!this.state.transaction.bank_transfer_proof){
+                if(this.state.transaction.transaction_status === "Cancelled"){
+                    return null
+                } else {
+                    return (
+                        <div className = 'row'>
+                        <div className = 'col-4'></div>
+                        <div className = 'col-4'>
+                        <button onClick={() => this.onSubmitButton()} className="btn btn-dark btn-block mt-2">Submit</button>
+                        </div>
+                        <div className = 'col-4'></div>
+                        </div>
+                        
+                    )
+                }
+            } else {
+                return null
+            }
+        }
+    
+    onSubmitButton = () => {
+            if(this.state.bankAccountName){
+                if (this.state.transferProof){
+                    let fd = new FormData()
+                    let data = {
+                        bank_name: this.state.bankName,
+                        bank_account_name: this.state.bankAccountName
+                    }
+    
+                    fd.append('browse_file', this.state.transferProof, this.state.transferProof.name)
+                    fd.append('data', JSON.stringify(data))
+    
+                    axios.patch(
+                        `http://localhost:1001/transactionproof/${this.props.match.params.id}`, fd
+                    ).then(res => {
+                        alert('Upload proof success')
+                        console.log(res.data.results)
+                        console.log(this.state.transferProof)
+                        
+                        // this.props.history.push("/complete")
+    
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                } else {
+                    alert('Please select an image')
+                }
+            } else {
+                alert('Please type account holder name')
+            }
+        }
+
 
 
 
@@ -140,11 +226,12 @@ class Payment extends Component{
     
      
     render() {
-    
+        console.log(this.state.transferProof)
         if(this.props.username){
             return(
                 <div className= 'container'>
                 <h4 style={{paddingTop:20,paddingLeft:20,paddingRight:20,paddingBottom:1}}>Invoice No. 2K19-CMDT-0{this.state.transaction.transaction_id}</h4>
+                <h6 style={{paddingTop:1,paddingLeft:20,paddingRight:20,paddingBottom:1}}>Status : </h6>
                 <div className='row'>
                 <div className='col-5'>
                 {this.renderContactcard()}
@@ -166,15 +253,24 @@ class Payment extends Component{
                         
                     </tbody>
                 </table>
-                <div className='row container'>
-                    <div className='col-6'>
-                        <p>Bank Account Transfer</p>
-                        <img src={require("../images/Bank_Central_Asia.png")} alt='Bank BCA' style={{height:'40px'}} ></img>
+                <div className='row'>
+                    <div className='container col-4'>
+                        <p style={{textAlign:'center'}}>Bank Account Transfer</p>
+                        <img src={require("../images/Bank_Central_Asia.png")} alt='Bank BCA' style={{height:'40px', display:'block', marginLeft:'auto', marginRight:'auto'}} ></img>
                         <br/>
-                        <p>12345678910<br/>PT.Commoditea Indonesia</p>
+            
+                        <p style={{textAlign:'center'}}>12345678910<br/>PT.Commoditea Indonesia</p>
                         
                     </div>
-                    <div className='col-6 container' style={{textAlign:'center'}}>Upload Payment Transaction</div>
+                    <div className='col-4'></div>
+                    <div className='col-4 container' style={{textAlign:'center'}}>
+                        <p>Upload Payment Transaction</p>
+                        {this.renderUpload()}
+                        {this.renderButton()}
+                
+                    </div>
+                    
+                        
 
                 </div>
 
@@ -184,7 +280,7 @@ class Payment extends Component{
         } else{
             return <Redirect to='/login'/>
         }
-}
+        }
 }   
 
   const mstp = (state) => {

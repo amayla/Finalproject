@@ -25,6 +25,7 @@ module.exports = {
             }
         })
     },
+
     createUser: (req, res) => {
         db.query(`insert into users (username, email, password) values ('${req.body.username}', '${req.body.email}', '${req.body.password}')`, (err, result) => {
             if (err) throw err
@@ -34,6 +35,7 @@ module.exports = {
             })
         })
     },
+    
     loginUser: (req, res) => {
         db.query(`select * from users where username = '${req.query.username}'`, (err, result) => {
             if (err) throw err
