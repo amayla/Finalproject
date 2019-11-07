@@ -12,6 +12,8 @@ import Payment from './payment'
 import ProductDetail from './productDetail'
 import PaymentVerification from './paymentVerification'
 import Footer from './footer'
+import Mytransaction from './mytransaction'
+import '../css/global.css'
 //import Checkout from './checkOut'
 import { keepLogin } from '../actions/index'
 import { connect } from  'react-redux'
@@ -44,7 +46,7 @@ class App extends Component{
     render(){
         if(this.state.check){
             return(
-            <div>
+            <div id='noxscroll'>
                 <BrowserRouter>
                 <Header/>
                 <Route path='/' exact component={Home}/>
@@ -58,6 +60,7 @@ class App extends Component{
                 <Route path='/payment/:id' component={Payment}/>
                 <Route path='/productdetail/:id' component={ProductDetail}/>
                 <Route path='/paymentverification' component={PaymentVerification}/>
+                <Route path='/mytransaction' component={Mytransaction}/>
                 <Footer/>
                 </BrowserRouter>
             </div>

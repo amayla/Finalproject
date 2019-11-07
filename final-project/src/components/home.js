@@ -18,7 +18,7 @@ const Home = (props) => {
             <Button style={{background:"#258472"}}>Learn More</Button>
           </div>
         </Jumbotron>
-        <div>
+        <div className='container'>
         <section id="promos" class="row">
           <div className="col-xs-12 col-sm-6" id="custom-grabber-1">
               <a href="" title="Turmeric Tea" >
@@ -36,7 +36,7 @@ const Home = (props) => {
                 <h3 id='h3'>Fall Favorites</h3>
               </a>
           </div>
-          <div>
+          <div style={{marginTop:'2%'}}>
           <div className="col-xs-12 col-sm-12">
               <a href="" title="Curated Brewing Vessels">
                 <img src="https://s3.amazonaws.com/cdn.rishi-tea.com/images/Promo/TeapotPromo.jpg" alt="Form and Function" style={{width:'100%'}}/>

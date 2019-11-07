@@ -5,6 +5,7 @@ import {Redirect} from "react-router-dom"
 
 
 
+
 class Payment extends Component{
     constructor(props){
         super(props)
@@ -13,6 +14,7 @@ class Payment extends Component{
                 transaction:'',
                 bankName:'',
                 bankAccountName:'',
+                bankAccountNumber:'',
                 transferProof:''
                 
         
@@ -22,7 +24,7 @@ class Payment extends Component{
         
     componentDidMount(){
             this.getData()
-            //this.getProvince()
+            
    
            
         }
@@ -32,7 +34,7 @@ class Payment extends Component{
             axios.get(
                 `http://localhost:1001/transaction/${this.props.match.params.id}`
             ).then(res => {
-                console.log(res.data.results)
+                console.log(res.data.results[0])
                 this.setState({transaction: res.data.results[0]})
             })
         }
@@ -120,26 +122,30 @@ class Payment extends Component{
                         <div className='row'>
                             <div>
                                 <div className='row'>
-                                <div className='col-4'>
-                                <p style={{fontSize:'14px'}}>Bank Name</p>  
-                            </div>
-                            <div className='col-7'>
-                            <input onChange={e => this.setState({bankName: e.target.value})} className="form-control mb-2"/>
-                            </div>
-                            <div className='col-4'>
-                                 <p style={{fontSize:'14px'}}>Account Name</p>
-                            
-                            </div>
-                            <div className='col-7'>
-                            <input onChange={e => this.setState({bankAccountName: e.target.value})} type="text" className="form-control mb-2"/>
-                            </div>
-                            <div className='col-4'>
-                                 <p style={{fontSize:'14px'}}>Proof of Transfer</p>
-                            </div>
-                            <div className='col-7'>
-                            <input onChange={e => this.setState({transferProof: e.target.files[0]})} type="file" className="form-control" style={{textAlign:'center', fontSize:'14px'}}/>
-                            </div> 
-
+                                    <div className='col-4'>
+                                        <p style={{fontSize:'14px'}}>Bank Name</p>  
+                                    </div>
+                                    <div className='col-7'>
+                                        <input onChange={e => this.setState({bankName: e.target.value})} className="form-control mb-2"/>
+                                    </div>
+                                    <div className='col-4'>
+                                        <p style={{fontSize:'14px'}}>Account Name</p>   
+                                    </div>
+                                    <div className='col-7'>
+                                        <input onChange={e => this.setState({bankAccountName: e.target.value})} type="text" className="form-control mb-2"/>
+                                    </div>
+                                    <div className='col-4'>
+                                        <p style={{fontSize:'14px'}}>Account Number</p>   
+                                    </div>
+                                    <div className='col-7'>
+                                        <input onChange={e => this.setState({bankAccountNumber: e.target.value})} type="text" className="form-control mb-2"/>
+                                    </div>
+                                    <div className='col-4'>
+                                        <p style={{fontSize:'14px'}}>Proof of Transfer</p>
+                                    </div>
+                                    <div className='col-7'>
+                                        <input onChange={e => this.setState({transferProof: e.target.files[0]})} type="file" className="form-control" style={{textAlign:'center', fontSize:'14px'}}/>
+                                    </div> 
                                 </div>
                             </div>
                             
@@ -149,16 +155,17 @@ class Payment extends Component{
             } else {
                 return (
                     <div className="col-12">
-                        <p>Transfer proof</p>
+                        <p>Transfer proof Uploaded</p>
                         <div className="row">
-                            <div className="col-2">
-                                <a href={'http://localhost:1001/files/transfer/' + this.state.transaction.transfer_proof} target="_blank" rel="noopener noreferrer">
-                                    <img src={'http://localhost:1001/files/transfer/' + this.state.transaction.transfer_proof} alt={this.state.transaction.transaction_id} width="150"/>
+                            <div className="col-5" style={{textAlign:'right'}}>
+                                <a href={'http://localhost:1001/files/transferproof/' + this.state.transaction.bank_transfer_proof} target="_blank" rel="noopener noreferrer">
+                                    View 
                                 </a>
                             </div>
-                            <div className="col-10">
-                                <div>Bank Name: {this.state.transaction.transfer_bank_name}</div>
-                                <div>Account Holder Name: {this.state.transaction.transfer_account_holder}</div>
+                            <div className="col-7">
+                                <div style={{textAlign:'left', fontSize:'12px'}}>Bank Name: {this.state.transaction.bank_name}</div>
+                                <div style={{textAlign:'left',fontSize:'12px'}}>Account Holder Name: {this.state.transaction.bank_account_name}</div>
+                                <div style={{textAlign:'left',fontSize:'12px'}}>Account Number : {this.state.transaction.bank_account_number}</div>
                             </div>
                         </div>
                     </div>
@@ -175,7 +182,7 @@ class Payment extends Component{
                         <div className = 'row'>
                         <div className = 'col-4'></div>
                         <div className = 'col-4'>
-                        <button onClick={() => this.onSubmitButton()} className="btn btn-dark btn-block mt-2">Submit</button>
+                        <button style={{marginBottom:'10px', fontSize:'12px', background:"#258472"}} onClick={() => this.onSubmitButton()} className="btn btn-dark btn-block mt-2">Submit</button>
                         </div>
                         <div className = 'col-4'></div>
                         </div>
@@ -193,7 +200,8 @@ class Payment extends Component{
                     let fd = new FormData()
                     let data = {
                         bank_name: this.state.bankName,
-                        bank_account_name: this.state.bankAccountName
+                        bank_account_name: this.state.bankAccountName,
+                        bank_account_number: this.state.bankAccountNumber
                     }
     
                     fd.append('browse_file', this.state.transferProof, this.state.transferProof.name)
@@ -231,7 +239,7 @@ class Payment extends Component{
             return(
                 <div className= 'container'>
                 <h4 style={{paddingTop:20,paddingLeft:20,paddingRight:20,paddingBottom:1}}>Invoice No. 2K19-CMDT-0{this.state.transaction.transaction_id}</h4>
-                <h6 style={{paddingTop:1,paddingLeft:20,paddingRight:20,paddingBottom:1}}>Status : </h6>
+                <h6 style={{paddingTop:1,paddingLeft:20,paddingRight:20,paddingBottom:1}}>Status : {this.state.transaction.transaction_status}</h6>
                 <div className='row'>
                 <div className='col-5'>
                 {this.renderContactcard()}

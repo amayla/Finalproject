@@ -33,6 +33,11 @@ module.exports={
                         recipient_pcode: result[0].recipient_pcode,
                         recipient_note: result[0].recipient_note,
                         transaction_date: result[0].transaction_date,
+                        bank_name:result[0].bank_name,
+                        bank_account_name:result[0].bank_account_name,
+                        bank_account_number:result[0].bank_account_number,
+                        bank_transfer_proof:result[0].bank_transfer_proof,
+                        transaction_status:result[0].transaction_status,
                         transaction_details: [{
                             transaction_details_id: result[0].transaction_details_id,
                             transaction_id: result[0].transaction_id,
@@ -99,13 +104,111 @@ module.exports={
             }
         })
     },
+    getTransactionbyUserId : ( req,res ) => {
+        //karena datanya transaction, where clausenya pakai params
+        //tp kalo mau cari pakai parameter lain, where clausenya pakai body
+        let sql = `select * from transaction join transaction_details on transaction.transaction_id = transaction_details.transaction_id where transaction.user_id=${req.query.user_id}`
+        
+        db.query(sql, (err,result) => {
+            if (err) throw err
+            
+            let data = []
+            let iterator = 0
+
+            for (let i = 0; i < result.length; i++) {
+                if (i == 0){
+                    data.push({
+                        transaction_id: result[0].transaction_id,
+                        user_id: result[0].user_id,
+                        recipient_address: result[0].recipient_address,
+                        recipient_phone: result[0].recipient_phone,
+                        recipient_name: result[0].recipient_name,
+                        recipient_province: result[0].recipient_province,
+                        recipient_city: result[0].recipient_city,
+                        recipient_pcode: result[0].recipient_pcode,
+                        recipient_note: result[0].recipient_note,
+                        transaction_date: result[0].transaction_date,
+                        bank_name:result[0].bank_name,
+                        bank_account_name:result[0].bank_account_name,
+                        bank_account_number:result[0].bank_account_number,
+                        bank_transfer_proof:result[0].bank_transfer_proof,
+                        transaction_status:result[0].transaction_status,
+                        transaction_amount:result[0].transaction_amount,
+                        transaction_details: [{
+                            transaction_details_id: result[0].transaction_details_id,
+                            transaction_id: result[0].transaction_id,
+                            user_id: result[0].user_id,
+                            product_id: result[0].product_id,
+                            product_name: result[0].product_name,
+                            product_price: result[0].product_price,
+                            product_qty: result[0].product_qty,
+                            total_price: result[0].total_price,
+                            
+                        }]
+                    })
+                    iterator++
+                    continue
+                }
+
+                if (result[i].transaction_id == result[i-1].transaction_id){
+                    data[iterator - 1].transaction_details.push({
+                        transaction_details_id: result[i].transaction_details_id,
+                        transaction_id: result[i].transaction_id,
+                        user_id: result[i].user_id,
+                        product_id: result[i].product_id,
+                        product_name: result[i].product_name,
+                        product_price: result[i].product_price,
+                        product_qty: result[i].product_qty,
+                        total_price: result[i].total_price,
+                    })
+                } else {
+                    data.push({
+                        transaction_id: result[i].transaction_id,
+                        user_id: result[i].user_id,
+                        recipient_address: result[i].recipient_address,
+                        recipient_phone: result[i].recipient_phone,
+                        recipient_name: result[i].recipient_name,
+                        recipient_note: result[i].recipient_note,
+                        transaction_date: result[i].transaction_date,
+                        transaction_amount: result[i].transaction_amount,
+                        transaction_status: result[i].transaction_status,
+                        transaction_details: [{
+                            transaction_details_id: result[i].transaction_details_id,
+                            transaction_id: result[i].transaction_id,
+                            user_id: result[i].user_id,
+                            product_id: result[i].product_id,
+                            product_name: result[i].product_name,
+                            product_price: result[i].product_price,
+                            product_qty: result[i].product_qty,
+                            total_price: result[i].total_price,
+                            
+                        }]
+                    })
+                    iterator++
+                }
+            }
+
+            if (result.length > 0){          
+                res.send({
+                    status: 200,
+                    results: data
+                })
+            } else {
+                res.send({
+                    status: 404,
+                    message: 'Data not found',
+                    results: result
+                })
+            }
+        })
+    },
 
     addToTransaction:(req,res) => {
         let carts = req.body.carts
         
         let sql = `insert into transaction (transaction_id, user_id, recipient_address,recipient_phone,
                     transaction_date,recipient_name,recipient_note,recipient_province,recipient_city, 
-                    recipient_pcode) 
+                    recipient_pcode,transaction_amount) 
                 values (
                     0,
                     ${req.body.user_id},
@@ -116,7 +219,8 @@ module.exports={
                     '${req.body.recipient_note}',
                     '${req.body.recipient_province}',
                     '${req.body.recipient_city}',
-                    ${req.body.recipient_pcode})`
+                    ${req.body.recipient_pcode},
+                    ${req.body.transaction_amount})`
         
         
             db.query(sql, (err,result)=>{
@@ -156,7 +260,6 @@ module.exports={
             })
         })
     },
-
 
     addTransferProof: (req, res) => {
         try {

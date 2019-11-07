@@ -26,15 +26,25 @@ class ManageProducts extends Component{
     //ketiga
     componentDidMount(){
 
-     console.log('DidMount')
-        
-        //Ambil semua data produk (get)
+     
      this.getData()  
      console.log(this.state.products) 
 
     }
 
-
+     
+     getData = () => {
+        axios.get('http://localhost:1001/products')
+        .then((res)=>{
+            
+            this.setState({
+                products:res.data.results,
+                selectedId:0
+            })
+        }).catch((err)=> {
+            console.log(err)
+        })
+    }
     // edit patch data
     onSaveClick = (idProduct) => {
         // axios.patch
@@ -42,11 +52,11 @@ class ManageProducts extends Component{
         axios.patch(
             `http://localhost:1001/products/${idProduct}`,
             {
-                name: this.state.selectedName,
-                description: this.state.selectedDesc,
-                price: this.state.selectedPrice,
-                picture: this.state.selectedPict,
-                stock:this.state.stock
+                product_name: this.state.selectedName,
+                product_desc: this.state.selectedDesc,
+                product_price: this.state.selectedPrice,
+                product_image: this.state.selectedPict,
+                product_stock: this.state.stock
             }
         ).then((res)=>{
             this.getData()
@@ -61,11 +71,11 @@ class ManageProducts extends Component{
             {
            
             selectedId: idProduct,
-            selectedName: product.name,
-            selectedDesc: product.description,
-            selectedPrice: product.price,
-            selectedPict: product.picture,
-            selectedStock: product.stock
+            selectedName: product.product_name,
+            selectedDesc: product.product_desc,
+            selectedPrice: product.product_price,
+            selectedPict: product.product_image,
+            selectedStock: product.product_stock
         } )
     }
 
@@ -87,11 +97,11 @@ class ManageProducts extends Component{
         axios.post(
             'http://localhost:1001/products',
             {
-                name:data_name,
-                description:data_desc,
-                price:data_price,
-                picture:data_picture,
-                stock:data_stock
+                product_name:data_name,
+                product_desc:data_desc,
+                product_price:data_price,
+                product_image:data_picture,
+                product_stock:data_stock
             }
         ).then((res)=>{
             alert('Berhasil')
@@ -116,17 +126,7 @@ class ManageProducts extends Component{
         
     }
 
-    // mengambil data dari database
-    getData = () => {
-        axios.get('http://localhost:1001/products')
-        .then((res)=>{
-            
-            this.setState({products:res.data.results,
-            selectedId:0})
-        }).catch((err)=> {
-            console.log(err)
-        })
-    }
+   
 
     // List product
     productList = () => {
@@ -137,26 +137,26 @@ class ManageProducts extends Component{
 
         
         return this.state.products.map((product)=>
-        { if (product.id!==this.state.selectedId){
+        { if (product.product_id!==this.state.selectedId){
             return (
-                <tr key={product.id}>
-                    <td>{product.name}</td>
-                    <td>{product.desc}</td>
-                    <td>{product.price}</td>
-                    <td>{product.stock}</td>
+                <tr key={product.product_id}>
+                    <td>{product.product_name}</td>
+                    <td>{product.product_desc}</td>
+                    <td>{product.product_price}</td>
+                    <td>{product.product_stock}</td>
                     <td>
-                        <img style={{width: "100px", height:"100px"}}src={product.picture} alt={product.desc}/>
+                        <img style={{width: "100px", height:"100px"}}src={product.product_image} alt={product.product_desc}/>
                     </td>
                     <td>
                         <button className="btn btn-outline-warning m-1"
                         // anonymous function
-                        onClick= {() => {this.onEditClick(product.id, product)}}> 
+                        onClick= {() => {this.onEditClick(product.product_id, product)}}> 
                             Edit
                         </button>
                         <button className="btn btn-outline-danger m-1"
                         // anonymous function
                         onClick= {(e) => {if(window.confirm(`Are you sure you wish to delete this item?`))
-                            this.onDeleteItem(product.id)}}> 
+                            this.onDeleteItem(product.product_id)}}> 
                             Delete
                         </button>
                     </td>
@@ -166,37 +166,37 @@ class ManageProducts extends Component{
         else{
             // di render sebagai textbox
             return(
-                <tr key={product.id}>
-                    <td>{product.id}</td>
+                <tr key={product.product_id}>
+               
                     <td><input type='text' 
                     className= 'form-control' 
                     size={8} 
-                    value={this.state.selectedName} 
+                    defaultValue={this.state.selectedName} 
                     onChange={(e) => {this.setState({selectedName:e.target.value})}}/>
                     </td>
 
                     <td><input type='text' 
                     className= 'form-control' 
                     size={8} 
-                    value={this.state.selectedDesc}
+                    defaultValue={this.state.selectedDesc}
                     onChange={(e) => {this.setState({selectedDesc:e.target.value})}}/></td>
                     
                     <td><input type='text' 
                     className= 'form-control' 
                     size={8} 
-                    value={this.state.selectedPrice}
+                    defaultValue={this.state.selectedPrice}
                     onChange={(e) => {this.setState({selectedPrice:e.target.value})}}/></td>
 
                     <td><input type='text' 
                     className= 'form-control' 
                     size={8} 
-                    value={this.state.selectedStock}
+                    defaultValue={this.state.selectedStock}
                     onChange={(e) => {this.setState({selectedPrice:e.target.value})}}/></td>
                     
                     <td><input type='text' 
                     className= 'form-control' 
                     size={8} 
-                    value={this.state.selectedPict}
+                    defaultValue={this.state.selectedPict}
                     onChange={(e) => {this.setState({selectedPict:e.target.value})}}/></td>
                     
                     <td>
@@ -207,7 +207,7 @@ class ManageProducts extends Component{
                     
                     
                         <button className='btn btn-outline-primary'
-                         onClick={() => {this.onSaveClick(product.id)}}>
+                         onClick={() => {this.onSaveClick(product.product_id)}}>
                          Save 
                         </button>
                     </td>
@@ -223,6 +223,7 @@ class ManageProducts extends Component{
     //kedua dan keempat
     render(){
         console.log('render')
+        console.log(this.state.products)
         
         if(this.props.username){
 

@@ -27,10 +27,8 @@ class checkout extends Component{
                 recipient_city:'',
                 recipient_district:'',
                 recipient_phone:'',
-                recipient_note:''
-                // province_list:[],
-                // city_list:[],
-                // province_id:''
+                recipient_note:'',
+                transaction_amount:0
                 
                 
         
@@ -46,6 +44,8 @@ class checkout extends Component{
 
     
 
+    
+
         //if cart empty, do not run get data function.
     getData = () => {
             axios.get(
@@ -56,8 +56,10 @@ class checkout extends Component{
                     }
                 }
             ).then(res => {
-                console.log(res.data.results)
+                // console.log(res.data.results)
                 this.setState({carts: res.data.results})
+                this.calculateTotal()
+
             })
         }
             
@@ -77,18 +79,37 @@ class checkout extends Component{
             })
         }
     
+        calculateTotal = () => {
+            let purchase = 0
+            let shipping = 0
+            let total
+           
+            console.log(this.state.carts)
+            this.state.carts.forEach((cart) => {
+                purchase += (cart.product_qty * cart.product_price)
+                total = purchase + shipping
+                
+            })
+            console.log(total)
+            this.setState({transaction_amount:total})
+            console.log(this.state.transaction_amount)
+            
+        }
    
     renderPurchase = () => {
-        let purchase = 0
-        let shipping = 0
-       
-
-        this.state.carts.forEach((cart) => {
-            purchase += (cart.product_qty * cart.product_price)
-            
-        })
+            let purchase = 0
+            let shipping = 0
+            let total = 0
         
+
+            this.state.carts.forEach((cart) => {
+                purchase += (cart.product_qty * cart.product_price)
+                total = purchase + shipping
+            })
+        
+
         return (
+            
            <> 
                 <tr>
                     <td colSpan='4'>Purchase</td>
@@ -100,7 +121,7 @@ class checkout extends Component{
                 </tr>
                 <tr style={{fontWeight:'bold'}}>
                     <td colSpan='4 '>Total</td>
-                    <td>Rp.{`${purchase + shipping}`.toLocaleString('id')}</td>
+                    <td>Rp.{`${total}`.toLocaleString('id')}</td>
                 </tr>
             </>
             
@@ -111,7 +132,7 @@ class checkout extends Component{
     onProceedtoPaymentCLick = () => {
 
         axios.post(
-            'http://localhost:1001/checkout',
+            'http://localhost:1001/transaction',
             {
                 transaction_id:0,
                 user_id:this.props.user_id,
@@ -123,6 +144,7 @@ class checkout extends Component{
                 recipient_city:this.state.recipient_city,
                 recipient_pcode:this.state.recipient_pcode,
                 recipient_note:this.state.recipient_note,
+                transaction_amount:this.state.transaction_amount,
                 carts:this.state.carts
 
             }
@@ -157,6 +179,9 @@ class checkout extends Component{
                 user_id:this.props.user_id,
                 recipient_address:this.state.recipient_address,
                 recipient_phone:this.state.recipient_phone,
+                recipient_province:this.state.recipient_province,
+                recipient_city:this.state.recipient_city,
+                recipient_pcode:this.state.recipient_pcode,
                 recipient_name:this.state.recipient_name,
                 recipient_note:this.state.recipient_note,
 
@@ -287,28 +312,7 @@ class checkout extends Component{
 
     //     }
 
-    saveAddress = () => {
-        axios.post(
-            'http://localhost:1001/products',
-            {
-                id_transaksi:1,
-                user_id:this.state.auth.id,
-                user_address:JSON.parse(this.state.recipient_address+this.state.recipient_province),
-                mobile_phone:this.state.recipient_phone,
-                transaction_date: Date.now(),
-                recipient_name:this.state.recipient_name,
-                address_remark:this.state.recipient_note
-            }
-        ).then((res)=>{
-            alert('Berhasil')
-        
-        }).catch((err)=>{
-            console.log(err)
-            alert('Gagal,coba buka console')
-        })
-
-    }
-
+    
     shippingForm = () => {
         return(
             

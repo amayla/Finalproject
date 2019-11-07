@@ -2,12 +2,16 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom' 
+import {Button} from 'reactstrap' 
+import PreviewProof from './previewProof'
+import {URL_API} from '../helpers/index'
 
 
 
 // import {connect} from 'react-redux'
 
 class PaymentVerification extends Component{
+
 
 
     state = {
@@ -70,17 +74,6 @@ class PaymentVerification extends Component{
     }
 
     
-
-    
-    
-    
-   
-
-   
-
-    
-    
-
     
     transactionList = () => {
    
@@ -90,21 +83,19 @@ class PaymentVerification extends Component{
                     <tr key={index}>
                         <td>{index+1}</td>
                         <td>{transaction.user_id}</td>
-                        <td>{transaction.transaction_id}</td>
+                        <td><a href={`/payment/${transaction.transaction_id}`} target='blank'>{transaction.transaction_id}</a></td>
                         <td>{transaction.transaction_date}</td>
-                        <td>{transaction.amount}</td>
-                        <td> 
-                            {/* <img style={{width: "100px", height:"100px"}}src={transaction.proof} alt={transaction.transaction_id}/> */}
-                        </td>
+                        <td>{transaction.transaction_amount}</td>
+                        <td><a href={URL_API+`files/transferproof/`+ transaction.bank_transfer_proof} target='blank' id='transProof'>View</a></td>
                         <td>{transaction.transaction_status}</td>
                         <td>
                             <button className="btn btn-outline-warning m-1"
-                            // anonymous function
+                            style={{fontSize:'65%'}}
                             onClick= {() => {this.onApproveClick(transaction.transaction_id)}}> 
                                 Approve
                             </button>
                             <button className="btn btn-outline-danger m-1"
-                            // anonymous function
+                            style={{fontSize:'65%'}}
                             onClick= {() => {if(window.confirm(`Are you sure you wish to decline this transaction?`))
                                 this.onDeclineClick(transaction.transaction_id)}}> 
                                 Decline
@@ -117,22 +108,20 @@ class PaymentVerification extends Component{
                     <tr key={index}>
                         <td>{index+1}</td>
                         <td>{transaction.user_id}</td>
-                        <td>{transaction.transaction_id}</td>
+                        <td><a href={`/payment/${transaction.transaction_id}`} target='blank'>{transaction.transaction_id}</a></td>
                         <td>{transaction.transaction_date}</td>
-                        <td>{transaction.amount}</td>
-                        <td>
-                            {/* <img style={{width: "100px", height:"100px"}}src={transaction.proof} alt={transaction.transaction_id}/> */}
-                        </td>
+                        <td>{transaction.transaction_amount}</td>
+                        <td><a href={URL_API+`files/transferproof/`+ transaction.bank_transfer_proof} target='blank' id='transProof'>View</a></td>
                         <td>{transaction.transaction_status}</td>
                         <td>
                             <button className="btn btn-outline-warning m-1"
-                            // anonymous function
+                            style={{fontSize:'65%'}}
                             disabled={true}
                             onClick= {() => {this.onApproveClick(transaction.transaction_id)}}> 
                                 Approve
                             </button>
                             <button className="btn btn-outline-danger m-1"
-                            // anonymous function
+                            style={{fontSize:'65%'}}
                             disabled={true}
                             onClick= {() => {if(window.confirm(`Are you sure you wish to decline this transaction?`))
                                 this.onDeclineClick(transaction.transaction_id)}}> 
@@ -147,21 +136,19 @@ class PaymentVerification extends Component{
                     <tr key={index}>
                         <td>{index+1}</td>
                         <td>{transaction.user_id}</td>
-                        <td>{transaction.transaction_id}</td>
+                        <td><a href={`/payment/${transaction.transaction_id}`} target='blank'>{transaction.transaction_id}</a></td>
                         <td>{transaction.transaction_date}</td>
-                        <td>{transaction.amount}</td>
-                        <td>
-                            {/* <img style={{width: "100px", height:"100px"}}src={transaction.proof} alt={transaction.transaction_id}/> */}
-                        </td>
+                        <td>{transaction.transaction_amount}</td>
+                        <td><a href={URL_API+`files/transferproof/`+ transaction.bank_transfer_proof} target='blank' id='transProof'>View</a></td>
                         <td>{transaction.transaction_status}</td>
                         <td>
                             <button className="btn btn-outline-warning m-1"
-                            // anonymous function
+                            style={{fontSize:'65%'}}
                             onClick= {() => {this.onApproveClick(transaction.transaction_id)}}> 
                                 Approve
                             </button>
                             <button className="btn btn-outline-danger m-1"
-                            // anonymous function
+                            style={{fontSize:'65%'}}
                             onClick= {() => {if(window.confirm(`Are you sure you wish to decline this transaction?`))
                                 this.onDeclineClick(transaction.transaction_id)}}> 
                                 Decline
@@ -174,12 +161,12 @@ class PaymentVerification extends Component{
         
     }
 
-
+    
     
     
     render(){
         console.log(this.state.transaction)
-        if(this.props.username){
+        if(this.props.username ==='admin'){
 
             return(
                 <div className="container">
@@ -210,7 +197,7 @@ class PaymentVerification extends Component{
 
         } else {
             return(
-                <Redirect to='/login'/>
+                <Redirect to='/home'/>
             )
         }
         

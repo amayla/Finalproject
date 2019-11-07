@@ -17,6 +17,8 @@ import {
 import {connect} from 'react-redux';
 import {onLogoutUser} from '../actions'
 import "../css/header.css"
+import headerLogo from '../images/logo/Comoditea.png'
+import cartIcon from '../images/shopping_cart.png'
 
 
 //import {Link,NavLink} from 'react-router-dom'
@@ -52,7 +54,7 @@ class Header extends React.Component {
                     <div className='container' style={{backgroundColor:'#ffff'}}>
                         <Navbar light expand="md" style={{backgroundColor:'#ffff',border: '1px solid white'}}>
                             <NavbarBrand href="/" style={{color:'#BEAC74'}}>
-                                <img src={require("./Comoditea.png")} height="70" alt="text here"/>
+                                <img src={headerLogo} height="70" alt="text here"/>
                             </NavbarBrand>
                               <NavbarToggler onClick={this.toggle} />
                               <Collapse isOpen={this.state.isOpen} navbar>
@@ -85,14 +87,14 @@ class Header extends React.Component {
                   <div className='container'>
                     <Navbar light expand="md" style={{backgroundColor:'#ffff',border: '1px solid white'}}>
                         <NavbarBrand href="/" style={{color:'#BEAC74'}}>
-                            <img src={require("./Comoditea.png")} height="70" alt="text here"/>
+                            <img src={headerLogo} height="70" alt="text here"/>
                         </NavbarBrand>
                             <NavbarToggler onClick={this.toggle} />
                                 <Collapse isOpen={this.state.isOpen} navbar>
                                       <Nav className="ml-auto" navbar>
                                           <NavItem>
                                               <NavLink href="/shoppingcart">
-                                              <img src={require("./shopping_cart_PNG46.png")} height="20" alt="text here"/>
+                                              <img src={cartIcon} height="20" alt="text here"/>
                                               </NavLink>
                                           </NavItem>
                                           <NavItem>
@@ -150,14 +152,14 @@ class Header extends React.Component {
                     <div style={{backgroundColor:'#ffff'}} className='container'>
                       <Navbar light expand="md" style={{backgroundColor:'#ffff',border: '1px solid white'}}>
                           <NavbarBrand href="/" style={{color:'#BEAC74'}}>
-                              <img src={require("./Comoditea.png")} height="70" alt="text here"/>
+                              <img src={headerLogo} height="70" alt="text here"/>
                           </NavbarBrand>
                             <NavbarToggler onClick={this.toggle} />
                               <Collapse isOpen={this.state.isOpen} navbar>
                                   <Nav className="ml-auto" navbar>
                                       <NavItem>
                                           <NavLink href="/shoppingcart">
-                                              <img src={require("./shopping_cart_PNG46.png")} height="20" alt="text here"/>
+                                              <img src={cartIcon} height="20" alt="text here"/>
                                           </NavLink>
                                       </NavItem>
                                       <NavItem>
@@ -172,6 +174,9 @@ class Header extends React.Component {
                                                 hello, {this.props.username}
                                             </DropdownToggle>
                                                 <DropdownMenu right>
+                                                    <DropdownItem style= {{fontFamily:'Comfortaa'}} href="/mytransaction">
+                                                      My Transaction
+                                                    </DropdownItem>
                                                     <DropdownItem style= {{fontFamily:'Comfortaa'}}>
                                                       Account
                                                     </DropdownItem>

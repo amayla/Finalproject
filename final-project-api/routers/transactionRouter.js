@@ -5,6 +5,7 @@ const { transactionController } = require('../controllers')
 
 router.get('/transaction', transactionController.getTransaction)
 router.get('/transaction/:id', transactionController.getTransactionbyId)
+router.get('/transactionbyuser', transactionController.getTransactionbyUserId)
 router.patch('/transaction/:id', transactionController.updateTransaction)
 router.post('/transaction', transactionController.addToTransaction)
 router.patch('/transactionproof/:id', uploadProof.single('browse_file'), transactionController.addTransferProof)
