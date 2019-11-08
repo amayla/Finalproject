@@ -2,9 +2,9 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom' 
-import {Button,Table} from 'reactstrap' 
-import PreviewProof from './previewProof'
-import {URL_API} from '../helpers/index'
+import {Table} from 'reactstrap' 
+import { URL } from '../helpers'
+
 
 
 
@@ -59,7 +59,7 @@ class Mytransaction extends Component{
                 return (
                     <tr key={index}>
                         <td>{index+1}</td>
-                        <td>{transaction.transaction_id}</td>
+                        <td><a href={URL+'payment/'+transaction.transaction_id} target='blank'>{transaction.transaction_id}</a></td>
                         <td>{transaction.transaction_date}</td>
                         <td>{transaction.transaction_amount}</td>
                         <td>{transaction.transaction_status}</td>
@@ -69,7 +69,7 @@ class Mytransaction extends Component{
                 return (
                     <tr key={index}>
                         <td>{index+1}</td>
-                        <td>{transaction.transaction_id}</td>
+                        <td><a href={URL+'payment/'+transaction.transaction_id} target='blank'>{transaction.transaction_id}</a></td>
                         <td>{transaction.transaction_date}</td>
                         <td>{transaction.transaction_amount}</td>
                         <td>{transaction.transaction_status}</td>
@@ -79,7 +79,7 @@ class Mytransaction extends Component{
                 return (
                     <tr key={index}>
                         <td>{index+1}</td>
-                        <td>{transaction.transaction_id}</td>
+                        <td><a href={URL+'payment/'+transaction.transaction_id} target='blank'>{transaction.transaction_id}</a></td>
                         <td>{transaction.transaction_date}</td>
                         <td>{transaction.transaction_amount}</td>
                         <td>{transaction.transaction_status}</td>
@@ -104,7 +104,7 @@ class Mytransaction extends Component{
                         <thead>
                             <tr>
                             <th>No</th>
-                            <th>Transaction ID</th>
+                            <th>Invoice</th>
                             <th>Transaction Date</th>
                             <th>Amount</th>
                             <th>Transaction Status</th>

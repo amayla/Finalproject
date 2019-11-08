@@ -2,7 +2,8 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom' 
-
+import { Input, Label} from 'reactstrap'
+import { URL_API} from '../helpers'
 
 
 // import {connect} from 'react-redux'
@@ -18,7 +19,12 @@ class ManageProducts extends Component{
         selectedDesc: '',
         selectedPrice: '',
         selectedPict: '',
-        selectedStock:''
+        selectedStock:'',
+        selectedFile:[],
+        product_name:'',
+        product_desc:'',
+        product_price:'',
+        product_stock:'',
 
 
     }
@@ -85,37 +91,40 @@ class ManageProducts extends Component{
     
     // Add Product. ada on nya krn berhubungan dengan event handler
     onAddProduct = () =>{
-        // komponen buat sendiri => klo bawaan (){}
-        //Ambil data dari text input
-        let data_name = this.name.value
-        let data_desc = this.desc.value
-        let data_price = this.price.value
-        let data_picture = this.pict.value
-        let data_stock = this.stock.value
+        let data = {
+            product_name : this.state.product_name,
+            product_desc : this.state.product_desc,
+            product_price : this.state.product_price,
+            product_stock : this.state.product_stock
+        }
 
-        // taruh (Post) database ke JSON
-        axios.post(
-            'http://localhost:1001/products',
-            {
-                product_name:data_name,
-                product_desc:data_desc,
-                product_price:data_price,
-                product_image:data_picture,
-                product_stock:data_stock
-            }
-        ).then((res)=>{
-            alert('Berhasil')
-            this.getData()
-            // mengambil data
+        if (this.state.selectedFile){
+            let fd = new FormData()
+            console.log(this.state.selectedFile)
+
+            fd.append('browse_file', this.state.selectedFile, this.state.selectedFile.name)
+            fd.append('data', JSON.stringify(data))
+
+            axios.post(
+                `http://localhost:1001/products/`, fd
+            ).then(res => {
+                alert('product successfully added')
+                this.getData()
+                console.log(res.data.results)
+                console.log(this.state.selectedFile)
+                
+                // this.props.history.push("/complete")
+
+            }).catch(err => {
+                console.log(err)
+            })
+        } else {
+            alert('Please select an image')
+        }
+    } 
         
-        }).catch((err)=>{
-            console.log(err)
-            alert('Gagal,coba buka console')
-        })
 
-        
-
-    }
+    
 
     onDeleteItem = (idProduct) => {
         axios.delete(`http://localhost:1001/products/${idProduct}`)
@@ -145,7 +154,7 @@ class ManageProducts extends Component{
                     <td>{product.product_price}</td>
                     <td>{product.product_stock}</td>
                     <td>
-                        <img style={{width: "100px", height:"100px"}}src={product.product_image} alt={product.product_desc}/>
+                        <img style={{width: "100px", height:"100px"}}src={URL_API+ 'files/products/' + product.product_image} alt={product.product_desc}/>
                     </td>
                     <td>
                         <button className="btn btn-outline-warning m-1"
@@ -223,7 +232,7 @@ class ManageProducts extends Component{
     //kedua dan keempat
     render(){
         console.log('render')
-        console.log(this.state.products)
+        console.log(this.state.selectedFile)
         
         if(this.props.username){
 
@@ -263,11 +272,13 @@ class ManageProducts extends Component{
                         </thead>
                         <tbody>
                             <tr>
-                            <td> <input ref={(input) => {this.name= input}}className="form-control" type="text"/></td>
-                            <td> <input ref={(input) => {this.desc= input}}className="form-control" type="text"/></td>
-                            <td> <input ref={(input) => {this.price= input}}className="form-control" type="text"/></td>
-                            <td> <input ref={(input) => {this.stock= input}}className="form-control" type="text"/></td>
-                            <td> <input ref={(input) => {this.pict= input}}className="form-control" type="text"/></td>
+                            <td> <input onChange={e => {this.setState({product_name:e.target.value})}} className="form-control" type="text"/></td>
+                            <td> <input onChange={e => {this.setState({product_desc:e.target.value})}} className="form-control" type="text"/></td>
+                            <td> <input onChange={e => {this.setState({product_price:e.target.value})}} className="form-control" type="text"/></td>
+                            <td> <input onChange={e => {this.setState({product_stock:e.target.value})}} className="form-control" type="text"/></td>
+                            <td> 
+                                <input onChange={e => this.setState({selectedFile: e.target.files[0]})} className='form-control' type="file" name="file" id="selectedFile" />
+                            </td>
                             
                             <td> 
                                 <button className="btn btn-outline-success"

@@ -201,22 +201,6 @@ class checkout extends Component{
     }
 
 
-    // renderShipping = () => {
-    //     let shipping = 0
-    //     // if(purchase <200000){shipping==10000}
-    //     // else if(purchase>200000){
-    //     //     shipping == 0
-    //     // }
-    //     return (
-    //         <tr>
-    //             <td colSpan='4'>Shipping</td>
-    //             <td>Rp.{shipping.toLocaleString('id')}</td>
-    //         </tr>
-    //     )
-        
-    //     }
-
-
     renderContactcard = () => {
        
         return (
@@ -242,75 +226,7 @@ class checkout extends Component{
             </div>
           );
           
-        }
-
-
-    // getProvince = () => {
-    //     axios.get(
-    //         `http://api.shipping.esoftplay.com/province`,
-            
-                
-    //     ).then(res => {
-            
-    //         this.setState({
-    //             // province_id:res.data.province_id,
-    //             province_list:res.data.result
-    //         })
-    //     })
-    //     }
-        
-
-    // provinceList = () => {
-    //     return this.state.province_list.map((data,index) => {
-           
-    //         return(
-                
-    //                 <option value={JSON.stringify(data)} data={data.province} key={index}>{data.province}</option>
-                
-    //         )
-    //     })
-
-    //     }
-
-    // getCity = () => {
-    //     axios.get(
-    //         `http://api.shipping.esoftplay.com/city/${this.state.province_id}`,
-           
-                
-    //     ).then(res => {
-    //         // console.log(res.data)
-    //         this.setState({
-    //             // province_id:res.data.province_id,
-    //             city_list:res.data.result
-    //         })
-    //     })
-
-    //     }
-
-    // cityList = () => {
-
-    //     return this.state.city_list.map((data,index) => {
-    //         return(
-                
-    //                 <option value={JSON.stringify(data)} key={index}>{data.city_name}</option>
-                
-    //         )
-    //     })
-
-    //     }
-        
-
-    // pcodeList = () => {
-
-    //     return this.state.city_list.map((data,index) => {
-    //         return(
-                
-    //                 <option value={data.postal_code} key={index}>{data.postal_code}</option>
-                
-    //         )
-    //     })
-
-    //     }
+    }
 
     
     shippingForm = () => {

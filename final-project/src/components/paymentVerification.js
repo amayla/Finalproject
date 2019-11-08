@@ -2,9 +2,9 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom' 
-import {Button} from 'reactstrap' 
-import PreviewProof from './previewProof'
 import {URL_API} from '../helpers/index'
+import moment from 'moment'
+import {Input} from 'reactstrap'
 
 
 
@@ -16,7 +16,8 @@ class PaymentVerification extends Component{
 
     state = {
         
-        transaction:[]
+        transaction:[],
+        shipping_number:0
         
 
     }
@@ -44,7 +45,6 @@ class PaymentVerification extends Component{
 
    
     onApproveClick = (idTransaction) => {
-        console.log(this.state.transaction.transaction_id)
         axios.patch(
             `http://localhost:1001/transaction/${idTransaction}`,
             {
@@ -59,7 +59,6 @@ class PaymentVerification extends Component{
     }
 
     onDeclineClick = (idTransaction) => {
-        console.log(this.state.transaction.transaction_id)
         axios.patch(
             `http://localhost:1001/transaction/${idTransaction}`,
             {
@@ -73,6 +72,22 @@ class PaymentVerification extends Component{
         })
     }
 
+    addShipping = (idTransaction) => {
+        axios.patch(
+            `http://localhost:1001/transhipstatus/${idTransaction}`,
+            {
+                shipping_number: this.state.shipping_number
+            }
+        ).then((res)=>{
+            this.getData()
+        }
+        ).catch((err) => {
+            console.log(err)
+        })
+        
+
+    }
+
     
     
     transactionList = () => {
@@ -83,13 +98,13 @@ class PaymentVerification extends Component{
                     <tr key={index}>
                         <td>{index+1}</td>
                         <td>{transaction.user_id}</td>
-                        <td><a href={`/payment/${transaction.transaction_id}`} target='blank'>{transaction.transaction_id}</a></td>
-                        <td>{transaction.transaction_date}</td>
+                        <td><a href={`/payment/${transaction.transaction_id}`} target='blank'>View</a></td>
+                        <td>{moment(transaction.transaction_date).format('DD-MM-YYYY, HH:mm')}</td>
                         <td>{transaction.transaction_amount}</td>
                         <td><a href={URL_API+`files/transferproof/`+ transaction.bank_transfer_proof} target='blank' id='transProof'>View</a></td>
                         <td>{transaction.transaction_status}</td>
                         <td>
-                            <button className="btn btn-outline-warning m-1"
+                            <button className="btn btn-outline-success m-1"
                             style={{fontSize:'65%'}}
                             onClick= {() => {this.onApproveClick(transaction.transaction_id)}}> 
                                 Approve
@@ -107,14 +122,16 @@ class PaymentVerification extends Component{
                 return (
                     <tr key={index}>
                         <td>{index+1}</td>
-                        <td>{transaction.user_id}</td>
-                        <td><a href={`/payment/${transaction.transaction_id}`} target='blank'>{transaction.transaction_id}</a></td>
-                        <td>{transaction.transaction_date}</td>
+                        <td><a href={`/payment/${transaction.transaction_id}`} target='blank'>View</a></td>
+                        <td>{moment(transaction.transaction_date).format('DD-MM-YYYY, HH:mm')}</td>
                         <td>{transaction.transaction_amount}</td>
                         <td><a href={URL_API+`files/transferproof/`+ transaction.bank_transfer_proof} target='blank' id='transProof'>View</a></td>
                         <td>{transaction.transaction_status}</td>
+                        <td><Input type='text' onChange={(e) =>{this.setState({shipping_number:e.target.value})}}/><button className='btn btn-link' 
+                            onClick={() => {this.addShipping(transaction.transaction_id)}}>add</button>
+                        </td>
                         <td>
-                            <button className="btn btn-outline-warning m-1"
+                            <button className="btn btn-outline-success m-1"
                             style={{fontSize:'65%'}}
                             disabled={true}
                             onClick= {() => {this.onApproveClick(transaction.transaction_id)}}> 
@@ -135,9 +152,8 @@ class PaymentVerification extends Component{
                 return (
                     <tr key={index}>
                         <td>{index+1}</td>
-                        <td>{transaction.user_id}</td>
-                        <td><a href={`/payment/${transaction.transaction_id}`} target='blank'>{transaction.transaction_id}</a></td>
-                        <td>{transaction.transaction_date}</td>
+                        <td><a href={`/payment/${transaction.transaction_id}`} target='blank'>View</a></td>
+                        <td>{moment(transaction.transaction_date).format('DD-MM-YYYY, HH:mm')}</td>
                         <td>{transaction.transaction_amount}</td>
                         <td><a href={URL_API+`files/transferproof/`+ transaction.bank_transfer_proof} target='blank' id='transProof'>View</a></td>
                         <td>{transaction.transaction_status}</td>
@@ -175,12 +191,12 @@ class PaymentVerification extends Component{
                         <thead>
                             <tr>
                             <th>No</th>
-                            <th>User ID</th>
-                            <th>Transaction ID</th>
+                            <th>Invoice</th>
                             <th>Transaction Date</th>
                             <th>Amount</th>
-                            <th>Transaction Proof</th>
+                            <th>Payment Proof</th>
                             <th>Transaction Status</th>
+                            <th>Shipping No.</th>
                             <th>Action</th>
                             </tr>
                         </thead>

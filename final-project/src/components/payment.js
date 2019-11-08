@@ -6,6 +6,7 @@ import {Redirect} from "react-router-dom"
 
 
 
+
 class Payment extends Component{
     constructor(props){
         super(props)

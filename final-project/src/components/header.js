@@ -45,7 +45,7 @@ class Header extends React.Component {
 
               <div style={{borderBottom:'1px solid #d5d8dc' }}>
                     <div id='promo-msg' style={{textAlign:'center', color:'white', backgroundColor:'#CC9966'}}>
-                        <div class='container'style={{textAlign:'center', color:'#CC9966', backgroundColor:'#CC9966', fontSize:'7px'}}>
+                        <div className='container'style={{textAlign:'center', color:'#CC9966', backgroundColor:'#CC9966', fontSize:'7px'}}>
                           ::before
                             <h6 style={{textAlign:'center', color:'white', backgroundColor:'#CC9966', marginTop:'3px'}}>Free domestic shipping with minimum purchase of IDR 50k</h6>
                           ::after
@@ -77,7 +77,7 @@ class Header extends React.Component {
           
               <div style={{borderBottom:'1px solid #d5d8dc' }}>
                   <div id='promo-msg' style={{textAlign:'center', color:'white', backgroundColor:'#CC9966'}}>
-                      <div class='container'style={{textAlign:'center', color:'#CC9966', backgroundColor:'#CC9966', fontSize:'7px'}}>
+                      <div className='container'style={{textAlign:'center', color:'#CC9966', backgroundColor:'#CC9966', fontSize:'7px'}}>
                         ::before
                           <h6 style={{textAlign:'center', color:'white', backgroundColor:'#CC9966', marginTop:'3px'}}>
                               Free domestic shipping with minimum purchase of IDR 50k</h6>

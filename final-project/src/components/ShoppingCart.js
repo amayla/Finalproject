@@ -32,6 +32,18 @@ class ShoppingCart extends Component{
                     checkout: this.state.carts
                 }
             })
+            axios.patch(
+            'http://localhost:1001/carts',
+            {
+                params: {
+                    product_id: this.state.carts.product_id
+                }
+            }).then((res)=>{
+                this.getData()
+            }
+            ).catch((err) => {
+                console.log(err)
+            })
         }
     
 
@@ -89,25 +101,25 @@ class ShoppingCart extends Component{
         }
     
 
-    change = (id, val) => {
-        let z = this.state.products;
-        for (let i = 0; i < z.length; i++) {
-            if(z[i].id === id){
-                z[i].qtyproduct = val
-            }           
+        change = (id, val) => {
+            let z = this.state.products;
+            for (let i = 0; i < z.length; i++) {
+                if(z[i].id === id){
+                    z[i].qtyproduct = val
+                }           
+            }
+            this.setState({'products': z})
         }
-        this.setState({'products': z})
-    }
 
-    Total= () => {
-        let total = 0
-        let array = this.state.products
-        for (let i = 0; i<array.length; i++){
-            total += array[i].price * array[i].qtyproduct
-        
+        Total= () => {
+            let total = 0
+            let array = this.state.products
+            for (let i = 0; i<array.length; i++){
+                total += array[i].price * array[i].qtyproduct
+            
+            }
+            return total
         }
-        return total
-    }
 
      
     render() {
@@ -132,7 +144,7 @@ class ShoppingCart extends Component{
                     </tbody>
                 </table>
                 <div className='text-center'>
-                    <a href='/checkout'><button className='btn mb-2 mr-2 col-4 'style={{backgroundColor:'#CC9966',color:'white'}} >Checkout</button></a>
+                    <a href='/checkout'><button className='btn mb-2 mr-2 'style={{backgroundColor:'#CC9966',color:'white'}} >Checkout</button></a>
                 </div>
                 
                 

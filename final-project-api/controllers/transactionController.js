@@ -1,5 +1,16 @@
 const db = require('../database')
 const fs = require('fs')
+// const nodemailer = require('nodemailer')
+// const { pdfcreate } = require('../helpers/html-pdf')
+
+ 
+// let transporter = nodemailer.createTransport({
+//     service:'gmail',
+//     auth:{
+//         user:'in.orchidfour@gmail.com',
+//         pass:'bkmvyezscludbsjf'
+//     }
+// })
 
 module.exports={
     getTransaction: (req,res) => {
@@ -208,7 +219,7 @@ module.exports={
         
         let sql = `insert into transaction (transaction_id, user_id, recipient_address,recipient_phone,
                     transaction_date,recipient_name,recipient_note,recipient_province,recipient_city, 
-                    recipient_pcode,transaction_amount) 
+                    recipient_pcode,transaction_amount,shipping_number) 
                 values (
                     0,
                     ${req.body.user_id},
@@ -220,7 +231,8 @@ module.exports={
                     '${req.body.recipient_province}',
                     '${req.body.recipient_city}',
                     ${req.body.recipient_pcode},
-                    ${req.body.transaction_amount})`
+                    ${req.body.transaction_amount},
+                    0)`
         
         
             db.query(sql, (err,result)=>{
@@ -247,17 +259,21 @@ module.exports={
     
     },
 
-    updateTransaction: (req, res) => {
+    updateTransactionStatus: (req, res) => {
         let sql = `update transaction set transaction_status = '${req.body.transaction_status}' where transaction_id = ${req.params.id}`
 
         db.query(sql, (err, result) => {
-            if (err) throw err
+            try {
+                if (err) throw err
 
             res.send({
                 status: 201,
                 message: 'Transaction Updated',
                 results: result
             })
+            }catch(error){
+                console.log(error)}
+            
         })
     },
 
@@ -291,5 +307,62 @@ module.exports={
             fs.unlinkSync(req.file.path)
             console.log(error)
         }
+    },
+    updateShipping: (req, res) => {
+        let sql = `update transaction set shipping_number = '${req.body.shipping_number}' where transaction_id = ${req.params.id}`
+
+        db.query(sql, (err, result) => {
+            try{
+                if (err) throw err
+
+            res.send({
+                status: 201,
+                message: 'Transaction Updated',
+                results: result
+            })
+            } catch (error) {
+                console.log(error)
+            }
+        })
     }
+    // sendPdf : (req,res) => {
+    //     let options = {
+    //         format : 'A4',
+    //         orientation : 'landscape',
+    //         border: {
+    //             top:'0.5in',
+    //             left:'0.15in',
+    //             right:'0.15in',
+    //             bottom:'0.25in'
+    //         }
+    //     }
+    //     let date = new Date()
+    //     let replacements = {
+    //         username: req.query.username,
+    //         date: `${date.getDate()}-${date.getMonth()}`,
+    //         data: ['Wahai', 'kalian', 'para', 'jomblo']
+    //     }
+
+          
+    //     pdfcreate('./pdfTemplate/invoiceTemplate.html',replacements,options,(hasil) => {
+    //         res.attachment('testingPDF.pdf')
+    //         hasil.pipe(res)
+    //         transporter.sendMail(
+    //             {
+    //                 from:'Amanda Larasati <in.orchidfour@gmail.com>',
+    //                 to: 'ayla3492@gmail.com',
+    //                 subject:'Your Shopping Invoice',
+    //                 html:`This is an attachment`,
+    //                 attachments: [
+    //                     {
+    //                         filename:`${req.query.username}-${date.getDate()}-${date.getMonth()+1}.pdf`,
+    //                         content:fs.createReadStream(hasil.path)
+    //                     }
+    //                 ]
+    //             }
+    //         )
+            
+    //     })
+    // }
+
 }

@@ -23,6 +23,7 @@ app.use(productRouter)
 app.use(cartRouter)
 app.use(checkoutRouter)
 app.use(transactionRouter)
-app.use('/files/transferproof', express.static('uploads/transfer'))
+app.use('/files/transferproof', express.static('./uploads/transfer'))
+app.use('/files/products', express.static('./uploads/products'))
 
 app.listen(port, () => console.log("Server up in port " + port))

@@ -9,6 +9,10 @@ module.exports = {
         if (req.query.username){
             sql = `${sql} where username = '${req.query.username}'`
         }
+        if (req.query.email){
+            sql = `${sql} where email = '${req.query.email}'`
+        }
+
         db.query(sql, (err, result) => {
             if (err) throw err
             if (result.length > 0){
@@ -27,7 +31,7 @@ module.exports = {
     },
 
     createUser: (req, res) => {
-        db.query(`insert into users (username, email, password) values ('${req.body.username}', '${req.body.email}', '${req.body.password}')`, (err, result) => {
+        db.query(`insert into users (id,username, email, password, role, verified) values (0,'${req.body.username}', '${req.body.email}', '${req.body.password}','user',0)`, (err, result) => {
             if (err) throw err
             res.send({
                 status: 201,

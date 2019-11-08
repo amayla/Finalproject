@@ -23,7 +23,8 @@ class Shop extends Component{
                 searchProducts: res.data.results,
 
             })
-            console.log(res.data.results)
+            console.log(this.state.products)
+            console.log(this.state.searchProducts)
         }).catch((err)=> {
             console.log(err)
         })
@@ -52,7 +53,7 @@ class Shop extends Component{
 
         let hasilFilter = this.state.products.filter((product) => {
             
-                return product.name.toLowerCase().includes(input_name.toLowerCase())&&(min<=product.price)&&(max>=product.price)
+                return (product.product_name.toLowerCase().includes(input_name.toLowerCase())&&(min<=product.product_price)&&(max>=product.product_price))
             
         })
         this.setState({searchProducts: hasilFilter})
@@ -63,9 +64,9 @@ class Shop extends Component{
         if (e.target.value ==='nameAsc'){
             console.log('sort nama')
             hasilSort = this.state.searchProducts.sort((a,b) => {
-                if(a.name>b.name){
+                if(a.product_name>b.product_name){
                     return 1
-                }else if(a.name<b.name){
+                }else if(a.product_name<b.product_name){
                     return -1
                 }else{
                     return 0
@@ -76,25 +77,21 @@ class Shop extends Component{
         else if (e.target.value === 'priceHighest'){
             console.log('sort by the highest price first')
             hasilSort = this.state.searchProducts.sort((a,b) => {
-                return (b.price - a.price)
+                return (b.product_price - a.product_price)
             })
         }
 
         else if(e.target.value === 'priceLowest'){
             console.log('sort by the lowest price first')
             hasilSort = this.state.searchProducts.sort((a,b) => {
-                return (a.price - b.price)
+                return (a.product_price - b.product_price)
             })
         }
         this.setState({searchProducts: hasilSort})
     }
 
-    // membuat list, akan menggunakan map
 
     renderList = () => {
-        //ambil data berupa array
-        //apabila products isinya array of object
-        // products = [{},{},{}]
         return this.state.searchProducts.map((product,index) => {
         
          return <ProductCard barang={product} key={index}/>   

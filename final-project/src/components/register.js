@@ -53,7 +53,8 @@ class Register extends Component{
                             email: email
                         }
                     }
-                    ).then((res) => {
+                    ).then((res) => {   
+                        console.log(res.data)
                         if(res.data.status === 200){
                             this.setState({
                                 loading: false,

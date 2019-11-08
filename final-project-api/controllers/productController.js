@@ -1,4 +1,5 @@
 const db = require('../database')
+const fs = require('fs')
 
 module.exports = {
     getProduct: (req, res) => {
@@ -67,19 +68,42 @@ module.exports = {
     },
 
     createProduct: (req, res) => {
-        let sql = `insert into products values (0, '${req.body.product_name}', '${req.body.product_desc}',
-        '${req.body.product_price}', '${req.body.product_image}', '${req.body.product_stock}', 'category',
-        CURRENT_TIMESTAMP)`
         
 
-        db.query(sql, (err,result) => {
-             
-                if (err) throw err
-                res.send({
-                    status: 201,
-                    results: result
-                })
-        })
+        try {
+            if(req.validation) throw req.validation
+            if(req.file.size > 5000000) throw {error: true, message: 'Image size too large'}
+
+            let data = JSON.parse(req.body.data)
+
+            console.log(data)
+            let sql = `insert into products values (0, '${data.product_name}', '${data.product_desc}',
+            '${data.product_price}', '${req.file.filename}', '${data.product_stock}', 'category',
+            CURRENT_TIMESTAMP)`
+            
+            console.log(data)
+            console.log(req.file)
+            db.query(sql, (err, result) => {
+
+                try {
+                    if (err) throw err
+                    res.send({
+                        status: 201,
+                        message: 'Image uploaded',
+                        results: result
+                    })
+                } catch (error) {
+                    // delete file when query/database error
+                    // fs.unlinkSync(req.file.path)
+                    console.log(error)                
+                }
+            })
+        } catch (error) {
+            // delete file if file size more than 5MB
+            console.log(req.file)
+            // fs.unlinkSync(req.file.path)
+            console.log(error)
+        }
     },
 
     editProduct: (req, res) => {
@@ -94,6 +118,19 @@ module.exports = {
                     status: 201,
                     results: result
                 })
+        })
+    },
+    deleteProduct:(req,res) => {
+        let sql = `delete from products where product_id=${req.params.id}` 
+        db.query(sql, (err, result) => {
+
+            if (err) throw err
+           
+                res.send({
+                    status: 200,
+                    results: result
+                })
+           
         })
     }
 
