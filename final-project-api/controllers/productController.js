@@ -33,6 +33,39 @@ module.exports = {
 
     },
 
+    getProductByCategory: (req, res) => {
+        db.query(`select * from products where product_category='${req.query.category}'`, (err, result) => {
+            if (err) throw err
+            if (result.length > 0){
+                // let data = result.map(val => {
+                //     return {
+                //         userId :val.userId,
+                //         product_id: val.product_id,
+                //         product_name: val.product_name,
+                //         product_desc: val.product_desc,
+                //         product_price: val.product_price,
+                //         product_image: val.product_image,
+                //         product_stock: val.product_stock,
+                //         product_category: val.product_category
+                //     }
+                // })
+                
+                res.send({
+                    status: 200,
+                    results: result
+                })
+            } else {
+                res.send({
+                    status: 404,
+                    message: 'Data not found',
+                    results: result
+                })
+            }
+        })
+
+    },
+
+
     getProductDetail: (req, res) => {
         let sql = `select * from products where product_id = ${req.params.id}`
         

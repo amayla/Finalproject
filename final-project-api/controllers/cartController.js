@@ -16,7 +16,7 @@ module.exports={
 
     getCart:(req,res) => {
         let sql = `select * from carts as c join products as p on c.product_id=p.product_id`
-        if(req.query){
+        if(req.query.user_id || req.query.product_id){
             sql += ` where`
             if(req.query.user_id){
                 sql += ` c.user_id = ${req.query.user_id} and`

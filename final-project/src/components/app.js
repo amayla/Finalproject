@@ -13,6 +13,7 @@ import ProductDetail from './productDetail'
 import PaymentVerification from './paymentVerification'
 import Footer from './footer'
 import Mytransaction from './mytransaction'
+import Collections from './collections'
 import '../css/global.css'
 //import Checkout from './checkOut'
 import { keepLogin } from '../actions/index'
@@ -58,9 +59,10 @@ class App extends Component{
                 <Route path='/shoppingcart' component={ShoppingCart}/>
                 <Route path='/checkout' component={checkout}/>
                 <Route path='/payment/:id' component={Payment}/>
-                <Route path='/productdetail/:id' component={ProductDetail}/>
+                <Route path='/productdetail' component={ProductDetail}/>
                 <Route path='/paymentverification' component={PaymentVerification}/>
                 <Route path='/mytransaction' component={Mytransaction}/>
+                <Route path='/collections/:id' component={Collections}/>
                 <Footer/>
                 </BrowserRouter>
             </div>

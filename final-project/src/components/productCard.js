@@ -2,10 +2,9 @@ import React,{Component} from 'react';
 import axios from 'axios'
 import {
   Card, CardImg, CardText, CardBody,
-  CardTitle, CardSubtitle, Button
+ CardSubtitle, Button
 } from 'reactstrap';
 import '../css/product.css'
-import Quicklook from './quicklook'
 import {connect} from 'react-redux'
 import Swal from 'sweetalert2'
 
@@ -14,7 +13,8 @@ import Swal from 'sweetalert2'
 class ProductCard extends Component{
 
   state = {
-    product_qty: 0
+    product_qty: 0,
+    def_value:1
   }
   onAddClick = (product_id) => {
     console.log(product_id)
@@ -84,24 +84,21 @@ render(){
       
       <div className='col-3 p-2 card-product' style={{borderColor:'#ffff'}} key={product_id}>
       <Card className='row'>
-        <CardImg style={{width:"250px",height:"250px",margin:"auto"}} src={product_image} alt="Card image cap" />
+        <CardImg style={{width:"250px",height:"250px",margin:"auto"}} src={'http://localhost:1001/files/products/' + product_image} alt="Card image cap" />
         <CardBody>
-          <CardTitle style= {{textAlign:'auto'}}><h6>{product_name}</h6></CardTitle>
+          <div>
+          <a  href ={`/productdetail/${product_id}`} color='link' style={{color:'black'}}><h6 style={{textAlign:'left'}}>{product_name}</h6></a>
+          </div>
+           
           <CardSubtitle><h6>IDR {product_price}</h6></CardSubtitle> 
           <div className = 'row'>
           <div className='col-4'>
           <CardText style={{fontSize:'12px', textAlign:'auto'}}>Stock : {product_stock}</CardText>
             </div>
-            <div className='col-4' style={{fontSize:'12px', textAlign:'auto'}}>
-             <Quicklook/>
-            </div>
-            <div className='col-4'>
-            <CardText><Button className='btn-block mb-2'href ={`/productdetail/${product_id}`} color='link' style={{color:'black', fontSize:'12px'}}>Description</Button></CardText>
-            </div>
           </div>
           <div className = 'row'>
           <div className = 'col-4 pr-0'>
-              <input className='form-control' type="number" min='0' ref= 'productQty' onChange={e =>this.setState({product_qty:parseInt(e.target.value)})}/> 
+              <input className='form-control' type="number" min='1' ref= 'productQty'  onChange={e =>this.setState({product_qty:parseInt(e.target.value)})}/> 
           </div>  
               <div className = 'col-8'>
                   <Button className='btn btn-block' onClick={()=>{this.onAddClick(product_id)}}

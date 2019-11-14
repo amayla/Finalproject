@@ -1,16 +1,6 @@
 const db = require('../database')
 const fs = require('fs')
-// const nodemailer = require('nodemailer')
-// const { pdfcreate } = require('../helpers/html-pdf')
 
- 
-// let transporter = nodemailer.createTransport({
-//     service:'gmail',
-//     auth:{
-//         user:'in.orchidfour@gmail.com',
-//         pass:'bkmvyezscludbsjf'
-//     }
-// })
 
 module.exports={
     getTransaction: (req,res) => {
@@ -219,7 +209,7 @@ module.exports={
         
         let sql = `insert into transaction (transaction_id, user_id, recipient_address,recipient_phone,
                     transaction_date,recipient_name,recipient_note,recipient_province,recipient_city, 
-                    recipient_pcode,transaction_amount,shipping_number) 
+                    recipient_pcode,transaction_amount,shipping_number,shipped) 
                 values (
                     0,
                     ${req.body.user_id},
@@ -232,6 +222,7 @@ module.exports={
                     '${req.body.recipient_city}',
                     ${req.body.recipient_pcode},
                     ${req.body.transaction_amount},
+                    0,
                     0)`
         
         
@@ -286,7 +277,7 @@ module.exports={
             console.log(data)
             console.log(req.file)
             db.query(
-                `update transaction set bank_name = '${data.bank_name}', bank_account_name = '${data.bank_account_name}',
+                `update transaction set bank_name = '${data.bank_name}', bank_account_name = '${data.bank_account_name}', bank_account_number = ${data.bank_account_number},
                 bank_transfer_proof = '${req.file.filename}' where transaction_id = ${req.params.id}`, (err, result) => {
 
                 try {
@@ -309,7 +300,7 @@ module.exports={
         }
     },
     updateShipping: (req, res) => {
-        let sql = `update transaction set shipping_number = '${req.body.shipping_number}' where transaction_id = ${req.params.id}`
+        let sql = `update transaction set shipping_number = '${req.body.shipping_number}', transaction_status = '${req.body.transaction_status}', shipped= 1 where transaction_id = ${req.params.id}`
 
         db.query(sql, (err, result) => {
             try{

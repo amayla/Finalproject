@@ -60,7 +60,6 @@ class Payment extends Component{
             
         }
     
-   
     renderPurchase = () => {
         let purchase = 0
         let shipping = 0
@@ -196,7 +195,7 @@ class Payment extends Component{
         }
     
     onSubmitButton = () => {
-            if(this.state.bankAccountName){
+            if(this.state.bankAccountName && this.state.bankAccountNumber){
                 if (this.state.transferProof){
                     let fd = new FormData()
                     let data = {
@@ -212,11 +211,18 @@ class Payment extends Component{
                         `http://localhost:1001/transactionproof/${this.props.match.params.id}`, fd
                     ).then(res => {
                         alert('Upload proof success')
-                        console.log(res.data.results)
-                        console.log(this.state.transferProof)
+                        axios.patch(
+                            `http://localhost:1001/transaction/${this.props.match.params.id}`,
+                            {
+                                transaction_status: 'Awaiting Admin Verification'
+                            }
+                        ).then((res)=>{
+                            this.getData()
+                        }
+                        ).catch((err) => {
+                            console.log(err)
+                        })
                         
-                        // this.props.history.push("/complete")
-    
                     }).catch(err => {
                         console.log(err)
                     })
@@ -224,7 +230,7 @@ class Payment extends Component{
                     alert('Please select an image')
                 }
             } else {
-                alert('Please type account holder name')
+                alert('Please fill your data')
             }
         }
 

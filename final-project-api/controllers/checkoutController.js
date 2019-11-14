@@ -3,18 +3,74 @@ const db = require ('../database')
 
 
 module.exports={
-    updateStock: (req,res) => {
-        let sql2 = `update products set product_stock = (select product_qty from carts where product_id = ${req.query.id}) - ${req.body.id} where product_id = ${req.query.id})`
-        db.query(sql2, (err,result) => {
+    updateStockOffline: (req,res) => {
+        let sql1 =  `select * from stocks where product_id=${req.body.product_id}`
+        db.query(sql1, (err,result) => {
+            console.log(result)
+            let sql2 = `update stocks set stock_offline =  (${result[0].stock_online} - ${req.body.product_qty})
+            where product_id = ${req.body.product_id}`
 
             if (err) throw err
-           
-            res.send({
-                status: 200,
-                results: result
+            db.query(sql2, (err2,result2) => {
+
+                if (err2) throw err2
+               
+                res.send({
+                    status: 200,
+                    results: result2
+                })
+    
             })
 
         })
+
+      
+    },
+    updateStock: (req,res) => {
+        let sql1 =  `select * from stocks where product_id=${req.body.product_id}`
+        db.query(sql1, (err,result) => {
+            console.log(result)
+            let sql2 = `update stocks set stock_online =  (${result[0].stock_online} - ${req.body.product_qty})
+            where product_id = ${req.body.product_id}`
+
+            if (err) throw err
+            db.query(sql2, (err2,result2) => {
+
+                if (err2) throw err2
+               
+                res.send({
+                    status: 200,
+                    results: result2
+                })
+    
+            })
+
+        })
+
+      
+    },
+    returnStock: (req,res) => {
+        let sql1 =  `select * from stocks where product_id=${req.body.product_id}`
+        db.query(sql1, (err,result) => {
+            console.log(result)
+            let sql2 = `update stocks set stock_online =  (${result[0].stock_online} + ${req.body.product_qty})
+            where product_id = ${req.body.product_id}`
+
+            if (err) throw err
+            db.query(sql2, (err2,result2) => {
+
+                if (err2) throw err2
+               
+                res.send({
+                    status: 200,
+                    results: result2
+                })
+    
+            })
+
+        })
+
+      
     },
     cartCheckout:(req,res) => {
         let sql = `delete from carts where user_id=${req.body.user_id}` 

@@ -11,7 +11,8 @@ class Login extends Component{
         super(props)
         this.state = {
             loading: '',
-            error: ''
+            error: '',
+            
         }
     }
 
@@ -26,10 +27,12 @@ class Login extends Component{
             {
                 params: {
                     username: this.username.value,
-                    password: this.password.value
+                    password: this.password.value,
+                    
                 }
             }
-        ).then((res)=> {
+        )
+        .then((res)=> {
             if (res.data.status === 404){
                 this.setState({
                     loading: false,
@@ -41,14 +44,27 @@ class Login extends Component{
                     }) 
                 }, 3000)
             } else {
-                let {id, username,email} = res.data.results[0]
-                localStorage.setItem(
-                    'userData',
-                    JSON.stringify({
-                        id, username
-                    })
-                )
-                this.props.onLoginUser(id,username,email)
+                let {id, username,email,verified} = res.data.results[0]
+                if(verified === 1){
+                    localStorage.setItem(
+                        'userData',
+                        JSON.stringify({
+                            id, username
+                        })
+                    )
+                    this.props.onLoginUser(id,username,email)
+                } 
+
+                else{
+                    alert('Please verify your account first to log in')
+                    setTimeout(() => { 
+                        this.setState({
+                            loading: false
+                        }) 
+                    }, 2000)
+                    
+                }
+                
             }
         })
     }  
@@ -67,12 +83,10 @@ loadingButton = () => {
     }
 
     return (
-        <button 
-            
+        <button  
             className="btn btn-block mt-4"
             style={{backgroundColor:'#CC9966',fontFamily:'Comfortaa',fontSize:'18px', color:'#ffff'}} 
-            onClick={this.onLoginClick}
-        >
+            onClick={this.onLoginClick}>
             Log in
         </button>
     )
@@ -129,7 +143,9 @@ notification = () => {
                 </div>
             )
 
-        } else {
+        }
+        
+        else {
             return <Redirect to= '/'/>
             
         }

@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import {connect} from "react-redux"
 import {onCart} from '../actions'
-
+import { URL_API} from '../helpers'
 
 
 class ProductDetail extends Component {
@@ -109,7 +109,7 @@ class ProductDetail extends Component {
             return (
                 <div className='row'>
                     <div className="col-6 mt-5" style={{borderRight:'1px solid grey'}}>
-                    <img className='card-img-top p-5' style={{marginLeft:'auto',marginRight:'auto', height:'450px',width:'450px',display:'block'}}alt='brg' src={this.state.product.product_picture}/>
+                    <img className='card-img-top p-5' style={{marginLeft:'auto',marginRight:'auto', height:'450px',width:'450px',display:'block'}}alt='brg' src={URL_API+ 'files/products/' + this.state.product.product_image}/>
                     <h5>Description</h5>
                     <p style={{marginTop:"20px"}}>{this.state.product.product_desc}</p>
                     </div>
@@ -118,8 +118,21 @@ class ProductDetail extends Component {
                     <h4>{this.state.product.product_name}</h4>
                     
                     <p>Rp. {this.state.product.product_price.toLocaleString('id')}</p>
-                    <input className='mb-2' type="number" min='0'onChange={e =>this.setState({product_qty:parseInt(e.target.value)})}/><br/>
+                    <input className='mb-2' type="number" min='1' onChange={e =>this.setState({product_qty:parseInt(e.target.value)})}/><br/>
                     <button className='btn btn-outline-success' onClick= {()=>{this.onAddClick()}}>Add To Cart</button>
+                    <div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <h5>Origin</h5>
+                        <p>{this.state.product.origin}</p>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <h5>Serving Suggestion</h5>
+
+                    </div>
                     </div>
                 </div>
                     

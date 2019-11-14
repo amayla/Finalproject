@@ -2,6 +2,8 @@ import React,{Component} from 'react'
 import Axios from 'axios';
 import ProductCard from './productCard'
 import {Button} from 'reactstrap'
+import {connect} from "react-redux"
+import {Redirect} from "react-router-dom"
 
 //import Link from 'react-router-dom'
 
@@ -102,78 +104,89 @@ class Shop extends Component{
     }
 
     render() {
-        return (
+        if(this.props.username) {
+            return (
             
-            <div className='container' style={{textAlign:"left"}}>
-                <div>   
-                    <div className='form p-3 border-bottom border-secondary card-title'>
-                        <div className='border-bottom border-secondary card-title'>
-                            <h4>Search</h4>
-                        </div>
-                        <div className='row mb-5'>
-                            <div className='col-6'>
-                                <h5 className= 'm-2'>Name</h5>
-                                <input 
-                                ref={(input)=>{this.name = input}}
-                                type='text' 
-                                className='mb-2 flex col-12'/>
+                <div className='container' style={{textAlign:"left"}}>
+                    <div>   
+                        <div className='form p-3 border-bottom border-secondary card-title'>
+                            <div className='border-bottom border-secondary card-title'>
+                                <h4>Search</h4>
                             </div>
-                            <div className='col-6'>
-                                    <div className='row'>
-                                    <div className='col-12'>
-                                        <h5 className='m-2'>Price</h5>
-                                    </div>
-                                    <div className='col-6'>
-                                        <input ref={(input)=>{this.minimum= input}} 
-                                        type='text' 
-                                        placeholder='Minimum' 
-                                        className='mb-2 flex col-12'/>
-                                    </div>
-                                     <div className='col-6 flex'>
-                                        <input ref={(input)=>{this.maximum= input}} 
-                                        type='text' 
-                                        placeholder='Maximum'
-                                        className='mb-2 flex col-12'/>
-                                     </div>
-                             </div>
+                            <div className='row mb-5'>
+                                <div className='col-6'>
+                                    <h5 className= 'm-2'>Name</h5>
+                                    <input 
+                                    ref={(input)=>{this.name = input}}
+                                    type='text' 
+                                    className='mb-2 flex col-12'/>
+                                </div>
+                                <div className='col-6'>
+                                        <div className='row'>
+                                        <div className='col-12'>
+                                            <h5 className='m-2'>Price</h5>
+                                        </div>
+                                        <div className='col-6'>
+                                            <input ref={(input)=>{this.minimum= input}} 
+                                            type='text' 
+                                            placeholder='Minimum' 
+                                            className='mb-2 flex col-12'/>
+                                        </div>
+                                         <div className='col-6 flex'>
+                                            <input ref={(input)=>{this.maximum= input}} 
+                                            type='text' 
+                                            placeholder='Maximum'
+                                            className='mb-2 flex col-12'/>
+                                         </div>
+                                 </div>
+                                </div>
                             </div>
-                        </div>
-                        <div className='row'>
-                        <div className='col-6'> 
-                        <div className='row'>
-                        <Button className='mb-2 mr-2 col-4 'style={{backgroundColor:'#CC9966'}} 
-                            onClick={this.onSearchClicked}>
-                            Search
-                        </Button>
-                        <Button className='mb-2 col-4' style={{backgroundColor:'#258472'}}
-                            onClick={this.onResetClicked}>
-                            Reset
-                        </Button>
-                        </div>
+                            <div className='row'>
+                            <div className='col-6'> 
+                            <div className='row'>
+                            <Button className='mb-2 mr-2 col-4 'style={{backgroundColor:'#CC9966'}} 
+                                onClick={this.onSearchClicked}>
+                                Search
+                            </Button>
+                            <Button className='mb-2 col-4' style={{backgroundColor:'#258472'}}
+                                onClick={this.onResetClicked}>
+                                Reset
+                            </Button>
+                            </div>
+                            
+                            </div>
+                            <div className = 'col-6'>
+                            <h5 className = 'm-2'
+                                style={{textAlign:"Left"}}>
+                                Sort by : </h5>
+                                <select name='sortComponent'
+                                    onChange={this.onSelectChange}>
+                                    <option style = {{color:"gray",fontSize:"11px",textDecoration:"italic"}} >Please Select</option>
+                                    <option value='nameAsc'>Name A-Z</option>
+                                    <option value= 'priceLowest'>Lowest Price First</option>
+                                    <option value= 'priceHighest'>Highest Price First</option>
+                                </select>
+                            </div>
+                            </div>
                         
                         </div>
-                        <div className = 'col-6'>
-                        <h5 className = 'm-2'
-                            style={{textAlign:"Left"}}>
-                            Sort by : </h5>
-                            <select name='sortComponent'
-                                onChange={this.onSelectChange}>
-                                <option style = {{color:"gray",fontSize:"11px",textDecoration:"italic"}} >Please Select</option>
-                                <option value='nameAsc'>Name A-Z</option>
-                                <option value= 'priceLowest'>Lowest Price First</option>
-                                <option value= 'priceHighest'>Highest Price First</option>
-                            </select>
-                        </div>
-                        </div>
-                    
+                    <div className='row col-12'style={{borderColor:'#ffff'}}>
+                        {this.renderList()}
                     </div>
-                <div className='row col-12'style={{borderColor:'#ffff'}}>
-                    {this.renderList()}
                 </div>
-            </div>
-            </div>
-        )
+                </div>
+            )
+        } else {
+            return <Redirect to="/"/>
+        }
+       
     }
 }
 
-export default Shop
+const mstp = (state) => {
+    return{
+        user_id : state.auth.id,
+        username: state.auth.username
+    }
+}
+export default connect(mstp)(Shop)

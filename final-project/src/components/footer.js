@@ -1,6 +1,8 @@
 import React from 'react'
 import "../css/footer.css"
 import commoditea from '../images/logo/Commoditea-square-white.png' 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTwitter, faInstagram, faFacebook, faYoutube } from '@fortawesome/free-brands-svg-icons'
 
 
 class Footer extends React.Component{
@@ -10,8 +12,8 @@ class Footer extends React.Component{
     render(){
 
         return(
-            <div style={{background:'#cc9966', paddingTop:'10px'}}>
-                    <div className='container' style={{background:'#cc9966'}}>
+            <div style={{background:'#cc9966'}} id='futer'>
+                    <div className='container'  style={{marginTop:"3%"}}>
                     <div className="row">
                             <div className="col-xs-12 col-sm-3 ft-service" id='footer' style={{paddingTop:'20px', paddingBottom:'20px'}}>
                                 <img src={commoditea} alt="Commoditea Logo" style={{height:'150px',width:'150px', display:'block',marginLeft:'auto', marginRight:'auto'}}/>  
@@ -50,10 +52,10 @@ class Footer extends React.Component{
                                 <h6>Contact Us <span className="glyphicon glyphicon-plus visible-xs"></span></h6>
                                 <hr/>
                                 <div>
-                                <a href='/'><img alt="Facebook"/></a>
-                                <a href='/'><img alt="Instagram"/></a>
-                                <a href='/'><img alt="Twitter"/></a>
-                                <a href='/'><img alt="Youtube"/></a>
+                                <FontAwesomeIcon style={{fontSize:'20px', marginRight:'3px' }} icon={faFacebook} />
+                                <FontAwesomeIcon style={{fontSize:'20px', marginRight:'3px'}} icon={faInstagram} />
+                                <FontAwesomeIcon style={{fontSize:'20px', marginRight:'3px'}} icon={faTwitter} />
+                                <FontAwesomeIcon style={{fontSize:'20px', marginRight:'3px'}} icon={faYoutube} />
                             </div>
                         
                             <div id='footer'>

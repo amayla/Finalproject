@@ -74,17 +74,29 @@ class Register extends Component{
                                     password: password
                                 }
                             ).then(() => {
-                                this.setState({
-                                    loading: false,
-                                    success:'Registration successful. Redirecting you to login page.'
+                                axios.post(
+                                    URL_API + 'sendmail', {
+                                        email: email
+                                    }
+                                ).then(res => {
+                                    this.setState({
+                                        email: '',
+                                        password: '',
+                                        repeatPassword: '',
+                                        loading: false,
+                                        success: 'Registration successful. Please check your inbox to verify your account.'
+                                    }) 
+                                    setTimeout(() => { 
+                                        this.setState({
+                                            success: ''
+                                        })
+                                    }, 5000) 
                                 })
-                                setTimeout(() => { 
-                                    this.props.history.push("/login")
-                                }, 3000) 
                             })
                         }
                     })
-                } else{
+                }
+                             else{
                     this.setState({
                         loading: false,
                         error: 'Password did not match.'
@@ -109,10 +121,10 @@ class Register extends Component{
             return (
                 <button 
                     className="btn btn-block mt-4" 
-                    style={{backgroundColor:'#CC9966',fontFamily:'arial',fontSize:'18px'}}
+                    style={{backgroundColor:'#CC9966',fontFamily:'arial',fontSize:'18px', color:'white'}}
                     onClick={this.onRegisterClick}
-                >
-                    Register
+                ><h5>Register</h5>
+                    
                 </button>
             )
     
@@ -137,10 +149,6 @@ class Register extends Component{
                 return null
             }
         }
-    
-
-       
-        
     
         
     

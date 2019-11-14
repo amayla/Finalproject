@@ -1,12 +1,10 @@
 var express = require('express')
 var bodyParser = require ('body-parser')
 var cors = require ('cors')
-
-
 const app = express()
 const port = 1001
-const { authRouter, productRouter, cartRouter,checkoutRouter,transactionRouter } = require('./routers')
-
+const { authRouter, productRouter, cartRouter,checkoutRouter,transactionRouter,verificationRouter } = require('./routers')
+var mysql = require('mysql')
 
 
 app.use(bodyParser.json())
@@ -23,6 +21,7 @@ app.use(productRouter)
 app.use(cartRouter)
 app.use(checkoutRouter)
 app.use(transactionRouter)
+app.use(verificationRouter)
 app.use('/files/transferproof', express.static('./uploads/transfer'))
 app.use('/files/products', express.static('./uploads/products'))
 

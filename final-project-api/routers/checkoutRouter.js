@@ -3,5 +3,8 @@ var router = express.Router()
 const { checkoutController } = require('../controllers')
 
 router.delete('/checkout', checkoutController.cartCheckout)
-router.patch('/checkout', checkoutController.updateStock)
+router.patch('/checkoutqty', checkoutController.updateStock)
+router.patch('/checkoutqtyoffline', checkoutController.updateStockOffline)
+router.patch('/returnqty', checkoutController.returnStock)
+
 module.exports = router

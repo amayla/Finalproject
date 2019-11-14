@@ -21,6 +21,7 @@ import headerLogo from '../images/logo/Comoditea.png'
 import cartIcon from '../images/shopping_cart.png'
 
 
+
 //import {Link,NavLink} from 'react-router-dom'
 class Header extends React.Component {
     constructor(props) {
@@ -102,8 +103,6 @@ class Header extends React.Component {
                                               </NavLink>
                                           </NavItem>
                                           <NavItem>
-                                              <NavLink className = 'ml-4' href="/" style= {{fontFamily:'Comfortaa'}}>Blog
-                                              </NavLink>
                                           </NavItem>
                                           <NavItem>
                                               <UncontrolledDropdown>
@@ -111,9 +110,6 @@ class Header extends React.Component {
                                                   hello, {this.props.username}
                                                   </DropdownToggle> 
                                                     <DropdownMenu right>
-                                                        <DropdownItem style= {{fontFamily:'Comfortaa'}}>
-                                                          Account
-                                                        </DropdownItem>
                                                         <DropdownItem href="/paymentverification" style= {{fontFamily:'Comfortaa'}}>
                                                           Payment Verification
                                                         </DropdownItem>
@@ -122,7 +118,7 @@ class Header extends React.Component {
                                                           Manage Products
                                                         </DropdownItem>
                                                         <DropdownItem divider />
-                                                        <DropdownItem style= {{fontFamily:'Comfortaa'}} onClick={this.onButtonClick}>
+                                                        <DropdownItem href='/' style= {{fontFamily:'Comfortaa'}} onClick={this.onButtonClick}>
                                                           Log Out
                                                         </DropdownItem>
                                                   </DropdownMenu>   
@@ -133,16 +129,13 @@ class Header extends React.Component {
                         </Navbar>
                     </div>
               </div>
-                  
-              
-
         )
       }
       else{
         return (
               <div style={{borderBottom:'1px solid #d5d8dc' }}>
                   <div id='promo-msg' style={{textAlign:'center', color:'white', backgroundColor:'#CC9966'}}>
-                        <div class='container'style={{textAlign:'center', color:'#CC9966', backgroundColor:'#CC9966', fontSize:'7px'}}>
+                        <div className='container'style={{textAlign:'center', color:'#CC9966', backgroundColor:'#CC9966', fontSize:'7px'}}>
                           ::before
                             <h6 style={{textAlign:'center', color:'white', backgroundColor:'#CC9966'}}>
                               Free domestic shipping with minimum purchase of IDR 50k</h6>
@@ -166,9 +159,6 @@ class Header extends React.Component {
                                           <NavLink className = 'ml-4' href="/shop" style= {{fontFamily:'Comfortaa'}}>Shop</NavLink>
                                       </NavItem>
                                       <NavItem>
-                                          <NavLink className = 'ml-4' href="/" style= {{fontFamily:'Comfortaa'}}>Blog</NavLink>
-                                      </NavItem>   
-                                      <NavItem>
                                           <UncontrolledDropdown>
                                             <DropdownToggle className = 'ml-4' nav caret style= {{fontFamily:'Comfortaa'}}>
                                                 hello, {this.props.username}
@@ -176,9 +166,6 @@ class Header extends React.Component {
                                                 <DropdownMenu right>
                                                     <DropdownItem style= {{fontFamily:'Comfortaa'}} href="/mytransaction">
                                                       My Transaction
-                                                    </DropdownItem>
-                                                    <DropdownItem style= {{fontFamily:'Comfortaa'}}>
-                                                      Account
                                                     </DropdownItem>
                                                     <DropdownItem divider />
                                                     <DropdownItem style= {{fontFamily:'Comfortaa'}} onClick={this.onButtonClick}>

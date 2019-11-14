@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom' 
 import {Table} from 'reactstrap' 
 import { URL } from '../helpers'
+import '../css/global.css'
 
 
 
@@ -79,7 +80,7 @@ class Mytransaction extends Component{
                 return (
                     <tr key={index}>
                         <td>{index+1}</td>
-                        <td><a href={URL+'payment/'+transaction.transaction_id} target='blank'>{transaction.transaction_id}</a></td>
+                        <td><a href={URL+'payment/'+transaction.transaction_id} target='blank'>View</a></td>
                         <td>{transaction.transaction_date}</td>
                         <td>{transaction.transaction_amount}</td>
                         <td>{transaction.transaction_status}</td>
@@ -98,7 +99,8 @@ class Mytransaction extends Component{
         if(this.props.username){
 
             return(
-                <div className="container">
+                <div className="container" id='page-container'>
+                    <div id='content-wrap'> 
                     <h1 className="text-center mt-3 mb-3">My Transaction</h1>
                     <Table className="table text-center">
                         <thead>
@@ -115,8 +117,9 @@ class Mytransaction extends Component{
                             
                         </tbody>
                     </Table>
-    
-                   
+
+                    </div>
+                      
     
                 </div>
             )

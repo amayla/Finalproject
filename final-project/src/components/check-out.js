@@ -5,8 +5,9 @@ import {connect} from "react-redux"
 import {Redirect} from "react-router-dom"
 import { Card, Button, CardHeader, CardBody,
     CardTitle, CardText } from 'reactstrap'
-
+import { URL_API} from '../helpers'
 import moment from 'moment'
+
 
 
 
@@ -37,8 +38,7 @@ class checkout extends Component{
         
     componentDidMount(){
             this.getData()
-            //this.getProvince()
-   
+           
            
         }
 
@@ -46,7 +46,7 @@ class checkout extends Component{
 
     
 
-        //if cart empty, do not run get data function.
+       
     getData = () => {
             axios.get(
                 'http://localhost:1001/carts',
@@ -69,9 +69,9 @@ class checkout extends Component{
             return this.state.carts.map((cart,index) => {
                return (
                 <tr key = {index}>
-                    <td></td>
+                    <td>{index+1}</td>
                     <td>{cart.product_name}</td>
-                    <td>{cart.product_desc}</td>
+                    <td><img style = {{width:"100px"}} className='list' src={URL_API+ 'files/products/'+cart.product_image} alt=""/></td>
                     <td>{cart.product_qty}</td>
                     <td>Rp.{cart.product_price.toLocaleString('id')}</td>  
                 </tr>
@@ -79,7 +79,7 @@ class checkout extends Component{
             })
         }
     
-        calculateTotal = () => {
+    calculateTotal = () => {
             let purchase = 0
             let shipping = 0
             let total
@@ -131,44 +131,65 @@ class checkout extends Component{
 
     onProceedtoPaymentCLick = () => {
 
-        axios.post(
-            'http://localhost:1001/transaction',
-            {
-                transaction_id:0,
-                user_id:this.props.user_id,
-                recipient_address:this.state.recipient_address,
-                recipient_phone:this.state.recipient_phone,
-                transaction_date: moment(new Date()).format('YYYY-MM-DD kk:mm:ss.SSS'),
-                recipient_name:this.state.recipient_name,
-                recipient_province:this.state.recipient_province,
-                recipient_city:this.state.recipient_city,
-                recipient_pcode:this.state.recipient_pcode,
-                recipient_note:this.state.recipient_note,
-                transaction_amount:this.state.transaction_amount,
-                carts:this.state.carts
+        if (
+            this.state.recipient_name &&
+            this.state.recipient_address &&
+            this.state.recipient_province &&
+            this.state.recipient_pcode &&
+            this.state.recipient_city &&
+            this.state.recipient_phone &&
+            this.state.recipient_note
 
-            }
-        ).then((res)=>{
-            alert('Berhasil')
-           
-            
-            axios.delete(
-                `http://localhost:1001/checkout`, {
-                    data: {
-                        user_id: this.props.user_id
-                    }
-            }).then( res2 => {
-                this.props.history.push(`/payment/${res.data.results.insertId}`)
-            })
-
+        ) {
+            axios.post(
+                'http://localhost:1001/transaction',
+                {
+                    transaction_id:0,
+                    user_id:this.props.user_id,
+                    recipient_address:this.state.recipient_address,
+                    recipient_phone:this.state.recipient_phone,
+                    transaction_date: moment(new Date()).format('YYYY-MM-DD kk:mm:ss.SSS'),
+                    recipient_name:this.state.recipient_name,
+                    recipient_province:this.state.recipient_province,
+                    recipient_city:this.state.recipient_city,
+                    recipient_pcode:this.state.recipient_pcode,
+                    recipient_note:this.state.recipient_note,
+                    transaction_amount:this.state.transaction_amount,
+                    carts:this.state.carts
+    
+                }
+            ).then((res) => {
+                for(let i=0;i<this.state.carts.length;i++){
+                    axios.patch(
+                        `http://localhost:1001/checkoutqty`,{
+                            product_id:this.state.carts[i].product_id,
+                            product_qty:this.state.carts[i].product_qty,
+                            
+                        }
+                    )
+                }
+    
+       
                 
-          
-        
-        }).catch((err)=>{
-            console.log(err)
-            alert('Gagal,coba buka console')
-        })
-
+                axios.delete(
+                    `http://localhost:1001/checkout`, {
+                        data: {
+                            user_id: this.props.user_id
+                        }
+                }).then( res2 => {
+                    this.props.history.push(`/payment/${res.data.results.insertId}`)
+                })    
+    
+                alert('Success')
+               
+                    
+            }).catch((err)=>{
+                console.log(err)
+                alert('Failed,check console')
+            })
+        } else {
+            alert("Please fill your contact information")
+        }
     }
 
     onSaveAddress = () => {
@@ -217,7 +238,7 @@ class checkout extends Component{
                     {this.state.recipient_city}<br/>
                     {this.state.recipient_pcode}<br/>
                   </CardText>
-                  <Button style={{backgroundColor:'#258472'}}>Save Address</Button>
+                  {/* <Button style={{backgroundColor:'#258472'}}>Save Address</Button> */}
                   <Button style={{marginLeft:2,backgroundColor:'#CC9966'}} onClick={this.onProceedtoPaymentCLick}>Proceed To Payment</Button>
                       
                   
@@ -329,11 +350,11 @@ class checkout extends Component{
                 <table className='table text-center'>
                     <thead>
                         <tr>
-                            <th></th>
-                            <th>NAME</th>
-                            <th>DESC</th>
-                            <th>QTY</th>
-                            <th>PRICE</th>
+                            <th>No.</th>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Qty</th>
+                            <th>Price</th>
                         </tr>
                     </thead>
                     <tbody>

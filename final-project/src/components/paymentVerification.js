@@ -17,6 +17,7 @@ class PaymentVerification extends Component{
     state = {
         
         transaction:[],
+        detail_transaction:[],
         shipping_number:0
         
 
@@ -51,6 +52,27 @@ class PaymentVerification extends Component{
                 transaction_status: 'Approved'
             }
         ).then((res)=>{
+
+            axios.get(`http://localhost:1001/transaction/${idTransaction}`
+                    )
+                    .then((res)=>{
+
+                        let transaction_details = res.data.results[0].transaction_details
+
+                        for(let i=0;i<transaction_details.length;i++){
+                            axios.patch(
+                                
+                                `http://localhost:1001/checkoutqtyoffline`,{
+                                
+                                     product_id: transaction_details[i].product_id,
+                                     product_qty: transaction_details[i].product_qty
+                                    
+                                    
+                                })
+                        }
+
+                    })
+
             this.getData()
         }
         ).catch((err) => {
@@ -58,13 +80,35 @@ class PaymentVerification extends Component{
         })
     }
 
-    onDeclineClick = (idTransaction) => {
+    onDeclineClick = (idTransaction, idUser) => {
         axios.patch(
             `http://localhost:1001/transaction/${idTransaction}`,
             {
                 transaction_status: 'Decline'
             }
-        ).then((res)=>{
+        
+            ).then((res)=>{
+
+                axios.get(`http://localhost:1001/transaction/${idTransaction}`
+                    )
+                    .then((res)=>{
+
+                        let transaction_details = res.data.results[0].transaction_details
+
+                        for(let i=0;i<transaction_details.length;i++){
+                            axios.patch(
+                                
+                                `http://localhost:1001/returnqty`,{
+                                
+                                     product_id: transaction_details[i].product_id,
+                                     product_qty: transaction_details[i].product_qty
+                                    
+                                    
+                                })
+                        }
+
+                    })
+            
             this.getData()
         }
         ).catch((err) => {
@@ -76,7 +120,9 @@ class PaymentVerification extends Component{
         axios.patch(
             `http://localhost:1001/transhipstatus/${idTransaction}`,
             {
-                shipping_number: this.state.shipping_number
+                shipping_number: this.state.shipping_number,
+                transaction_status: 'On Shipping Process',
+                shipped:1
             }
         ).then((res)=>{
             this.getData()
@@ -93,16 +139,16 @@ class PaymentVerification extends Component{
     transactionList = () => {
    
         return this.state.transaction.map((transaction,index)=>{
-            if(transaction.transaction_status===null){
+            if(transaction.transaction_status==='Awaiting Admin Verification'){
                 return (
                     <tr key={index}>
                         <td>{index+1}</td>
-                        <td>{transaction.user_id}</td>
                         <td><a href={`/payment/${transaction.transaction_id}`} target='blank'>View</a></td>
                         <td>{moment(transaction.transaction_date).format('DD-MM-YYYY, HH:mm')}</td>
                         <td>{transaction.transaction_amount}</td>
                         <td><a href={URL_API+`files/transferproof/`+ transaction.bank_transfer_proof} target='blank' id='transProof'>View</a></td>
                         <td>{transaction.transaction_status}</td>
+                        <td>-</td>
                         <td>
                             <button className="btn btn-outline-success m-1"
                             style={{fontSize:'65%'}}
@@ -112,7 +158,7 @@ class PaymentVerification extends Component{
                             <button className="btn btn-outline-danger m-1"
                             style={{fontSize:'65%'}}
                             onClick= {() => {if(window.confirm(`Are you sure you wish to decline this transaction?`))
-                                this.onDeclineClick(transaction.transaction_id)}}> 
+                                this.onDeclineClick(transaction.transaction_id, transaction.user_id)}}> 
                                 Decline
                             </button>
                         </td>
@@ -157,14 +203,18 @@ class PaymentVerification extends Component{
                         <td>{transaction.transaction_amount}</td>
                         <td><a href={URL_API+`files/transferproof/`+ transaction.bank_transfer_proof} target='blank' id='transProof'>View</a></td>
                         <td>{transaction.transaction_status}</td>
+                        <td>{transaction.shipping_number}</td>
                         <td>
                             <button className="btn btn-outline-warning m-1"
                             style={{fontSize:'65%'}}
-                            onClick= {() => {this.onApproveClick(transaction.transaction_id)}}> 
+                            onClick= {() => {this.onApproveClick(transaction.transaction_id)}}
+                            disabled={true}
+                            > 
                                 Approve
                             </button>
                             <button className="btn btn-outline-danger m-1"
                             style={{fontSize:'65%'}}
+                            disabled={true}
                             onClick= {() => {if(window.confirm(`Are you sure you wish to decline this transaction?`))
                                 this.onDeclineClick(transaction.transaction_id)}}> 
                                 Decline

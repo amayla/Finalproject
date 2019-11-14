@@ -1,6 +1,7 @@
 *{
     font-family: Roboto,sans-serif;
     
+    
 }
 
 h1,h2,h3,h4,h5,h6{
@@ -10,3 +11,15 @@ h1,h2,h3,h4,h5,h6{
 #noxscroll{
     overflow-x:hidden
 }
+
+#test{
+    background: #D5AF63;
+}
+
+#page-container {
+    position: relative;
+    min-height: 100vh;
+  }
+#content-wrap {
+    padding-bottom: 2.5rem;    /* Footer height */
+  }
