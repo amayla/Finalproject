@@ -1,6 +1,6 @@
 import React from 'react'
 import '../css/home.css'
-import { Jumbotron, Button } from 'reactstrap'
+import { Jumbotron } from 'reactstrap'
 import PromoLeft from '../images/original.gif'
 import PromoRight from '../images/306164665201201.jpg'
 import PromoBottom from '../images/teas.jpg'
@@ -19,7 +19,7 @@ const Home = (props) => {
             <h1 className="display-3 container" style={{fontFamily:'Comfortaa', textAlign:'center'}}>Hello, You!</h1>
             <p className="lead container" style={{textAlign:'center'}}>Find our best teas specially curated to suits your indulgence.</p> 
             <div className="container text-center">
-              <Button style={{background:"#258472"}}>Shop Now </Button>
+              {/* <Button style={{background:"#258472"}}>Shop Now </Button> */}
             </div>
         </Jumbotron>
         <div className='container'>

@@ -1,6 +1,7 @@
 import React,{Component} from 'react'
 import Axios from 'axios';
 import ProductCard from './productCard'
+// import {connect} from 'react-redux'
 
 
 
@@ -85,4 +86,6 @@ class Collections extends Component{
     }
 }
 
-export default Collections
+
+    export default Collections
+

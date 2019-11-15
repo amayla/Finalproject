@@ -17,7 +17,19 @@ class ProductCard extends Component{
     def_value:1
   }
   onAddClick = (product_id) => {
-    console.log(product_id)
+    console.log(this.props.user_id);
+    
+    if(!this.props.user_id){
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Please log in first'
+        
+      })
+      
+    } else {
+      
+      console.log(product_id)
      axios.get( 
         'http://localhost:1001/carts',
         {
@@ -63,6 +75,10 @@ class ProductCard extends Component{
         }
     })
 
+
+    }
+    
+
      
  }   
 
@@ -79,6 +95,7 @@ class ProductCard extends Component{
   
 render(){
   let{product_id, product_name, product_price, product_stock, product_image} = this.props.barang
+  console.log(product_id)
   console.log(this.state.product_qty)
   return (
       

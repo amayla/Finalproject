@@ -18,6 +18,7 @@ class ProductDetail extends Component {
     
 
     componentDidMount() {
+        console.log(this.props)
         axios.get(
             `http://localhost:1001/products/${this.props.match.params.id}` 
 
